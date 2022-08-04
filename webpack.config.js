@@ -11,8 +11,8 @@ export default {
   mode: devMode ? "development" : "production",
   output: {
     path: path.resolve(outputDirectory),
-    filename: devMode ? "[name].js" : "[name].[hash].js",
-    chunkFilename: devMode ? "[id].js" : "[id].[hash].js",
+    filename: devMode ? "[name].js" : "[name].[fullhash].js",
+    chunkFilename: devMode ? "[id].js" : "[id].[chunkhash].js",
   },
 
   // Enable sourcemaps for debugging webpack's output.
