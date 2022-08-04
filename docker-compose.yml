@@ -3,7 +3,7 @@ services:
   server:
     image: node:16.6-bullseye-slim
     ports:
-      - "8080:3000"
+      - "8080:3001"
     working_dir: /app
     environment:
       - NODE_ENV=development
