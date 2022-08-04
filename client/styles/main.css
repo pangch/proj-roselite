@@ -8,7 +8,7 @@
 */
 
 body {
-  font-family: Roboto, Arial, Helvetica, sans-serif;
+  font-family: Roboto, sans-serif;
   background: #3AAFA9;
   color: #FEFFFF;
   margin: 0;
@@ -16,7 +16,6 @@ body {
 }
 
 #app {
-  border: 1px solid blue;
   margin: 0;
   padding: 0;
 }
@@ -26,23 +25,40 @@ body {
 }
 
 .section-users {
+  border: 2px solid #FEFFFF;
   min-width: 10rem;
-  background: #2B7A78;
-}
-
-.section-messages {
-  background: #FEFFFF;
-  color: #17252A;
-  padding: 1rem;
+  margin: 0 1rem;
+  padding: 0.5rem;
 }
 
 .section-info {
-  min-width: 10rem;
-  background: #2B7A78;
+  border: 2px solid #FEFFFF;
+  min-width: 18rem;
+  margin: 0 1rem;
+  padding: 0.5rem;
+  font-family: 'Roboto Mono', monospace;
+  font-size: small;
+}
+
+.section-messages {
+  border: 2px solid #FEFFFF;
+  padding: 0.5rem;
+}
+
+.section-input textarea {
+  padding: 2px;
+  border: none;
+  outline: none;
+  resize: none;
 }
 
 .section-console {
-  min-height: 8rem;
+  font-family: 'Roboto Mono', monospace;
+  font-size: small;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  min-height: 12rem;
   background: #17252A;
   color: #FEFFFF;
 }
+

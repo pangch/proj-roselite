@@ -12,13 +12,13 @@ export default function App() {
     <div className="flex flex-col grow h-screen">
       <Title />
       <div className="flex grow">
-        <div className="flex flex-col grow-0">
-          <Users />
-          <Info />
-        </div>
+        <Users />
         <div className="flex flex-col grow">
           <Messages />
           <Input />
+        </div>
+        <div className="flex flex-col grow-0">
+          <Info />
         </div>
       </div>
       <Console />
