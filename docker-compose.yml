@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  server:
+    image: node:16.6-bullseye-slim
+    ports:
+      - "8080:3000"
+    working_dir: /app
+    environment:
+      - NODE_ENV=development
+    command: ["npm", "run", "dev"]
+    restart: always
+    networks:
+      - intern
+    volumes:
+      - type: bind
+        source: ./
+        target: /app
+
+networks:
+  intern:
