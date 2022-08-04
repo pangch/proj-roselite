@@ -5,6 +5,8 @@ async function boot() {
   const app = express();
   const port = process.env.PORT || 3001;
 
+  app.use(express.static("dist/public"));
+
   await websockets(app);
 
   app.listen(port, () => {
