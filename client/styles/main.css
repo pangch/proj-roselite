@@ -1,4 +1,48 @@
 
+/*
+#17252A
+#2B7A78
+#3AAFA9
+#DEF2F1
+#FEFFFF
+*/
+
 body {
   font-family: Roboto, Arial, Helvetica, sans-serif;
+  background: #3AAFA9;
+  color: #FEFFFF;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  border: 1px solid blue;
+  margin: 0;
+  padding: 0;
+}
+
+.section-title {
+  padding: 0.5rem 2rem;
+}
+
+.section-users {
+  min-width: 10rem;
+  background: #2B7A78;
+}
+
+.section-messages {
+  background: #FEFFFF;
+  color: #17252A;
+  padding: 1rem;
+}
+
+.section-info {
+  min-width: 10rem;
+  background: #2B7A78;
+}
+
+.section-console {
+  min-height: 8rem;
+  background: #17252A;
+  color: #FEFFFF;
 }

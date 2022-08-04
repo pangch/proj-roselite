@@ -1,5 +1,27 @@
 import * as React from "react";
 
+import Title from "./components/Title";
+import Users from "./components/Users";
+import Messages from "./components/Messages";
+import Input from "./components/Input";
+import Info from "./components/Info";
+import Console from "./components/Console";
+
 export default function App() {
-  return <div>Hello World</div>;
+  return (
+    <div className="flex flex-col grow h-screen">
+      <Title />
+      <div className="flex grow">
+        <div className="flex flex-col grow-0">
+          <Users />
+          <Info />
+        </div>
+        <div className="flex flex-col grow">
+          <Messages />
+          <Input />
+        </div>
+      </div>
+      <Console />
+    </div>
+  );
 }
