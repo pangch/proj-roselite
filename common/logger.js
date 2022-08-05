@@ -16,6 +16,7 @@ class Logger {
   #log(message, level, error = null) {
     const logMessage = `[${this.tag}] ${message}`;
     console[level](logMessage);
+
     loggerObservable.emit({
       type: "new",
       item: {

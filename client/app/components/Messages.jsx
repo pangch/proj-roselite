@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { isEmpty } from "lodash";
 import { useMessagesContext } from "../contexts/MessagesContext";
 import { getSessionId } from "../utils/session";
-import { getUserFromId } from "../utils/users";
+import { getUserNameFromId } from "../utils/users";
 
 function EmptyPlaceholder() {
   return <div>No messages</div>;
@@ -18,7 +18,7 @@ function StatusMessageItem({ message }) {
 
 function TextMessageItem({ message, isSelf }) {
   const id = message.userId;
-  const user = getUserFromId(id);
+  const username = getUserNameFromId(id);
   return (
     <li
       className={classNames(
@@ -29,7 +29,7 @@ function TextMessageItem({ message, isSelf }) {
         isSelf ? ["sent-message"] : ["received-message"]
       )}
     >
-      <div className="username">{user?.username}</div>
+      <div className="username">{username}</div>
       <div className="content">{message.content}</div>
     </li>
   );

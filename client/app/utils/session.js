@@ -1,15 +1,26 @@
-import { range } from "lodash";
+import { range, isEmpty } from "lodash";
 import Observable from "../../../common/observable.js";
 import { notifyUsername } from "../services/websocket.js";
 
-let id = null;
-let username = randomName();
-let isManualUsername = false;
+let sessionInfo = initSessionInfo();
 
 const sessionObservable = new Observable();
 
 export function subscribeSession(handler) {
   return sessionObservable.subscribe(handler);
+}
+
+function initSessionInfo() {
+  let username = localStorage.getItem("username");
+
+  if (isEmpty(username)) {
+    username = randomName();
+  }
+
+  return {
+    id: null,
+    username,
+  };
 }
 
 function randomName() {
@@ -23,26 +34,26 @@ function randomName() {
 }
 
 export function setSessionId(newId) {
-  id = newId;
-  sessionObservable.emit({ type: "update-id", id });
+  sessionInfo.id = newId;
+  sessionObservable.emit({ type: "update-id", id: newId });
 }
 
 export function setUsername(newUsername) {
-  username = newUsername;
-  isManualUsername = true;
+  if (isEmpty(newUsername)) {
+    return;
+  }
+
+  sessionInfo.username = newUsername;
+  localStorage.setItem("username", newUsername);
   sessionObservable.emit({ type: "update" });
 
-  notifyUsername(username);
+  notifyUsername(newUsername);
 }
 
 export function getSessionId() {
-  return id;
+  return sessionInfo.id;
 }
 
 export function getSessionInfo() {
-  return {
-    id,
-    username,
-    isManualUsername,
-  };
+  return sessionInfo;
 }

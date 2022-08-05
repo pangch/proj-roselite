@@ -13,6 +13,9 @@ import {
 const logger = createLogger("WebSocket");
 const server = `ws://${window.location.host}`;
 
+const MIN_RETRY_WAIT = 100;
+const MAX_RETRY_WAIT = 5 * 60 * 1000;
+
 let client = null;
 
 class WSClient {
@@ -28,6 +31,8 @@ class WSClient {
   }
 
   handleOpen(event) {
+    retryWait = MIN_RETRY_WAIT;
+
     logger.info("Connection established");
     const sessionInfo = getSessionInfo();
     const { username } = sessionInfo;
@@ -64,12 +69,11 @@ class WSClient {
     }
   }
 
-  handleError(event) {
-    logger.error(`Error: ${error.message}`, "error");
+  handleError(error) {
+    logger.error("WebSocket connection error.", error);
   }
 
   handleClose(event) {
-    client = null;
     if (event.wasClean) {
       logger.info(
         `Connection closed cleanly, code=${event.code} reason=${event.reason}`
@@ -77,6 +81,8 @@ class WSClient {
     } else {
       logger.info("Connection died");
     }
+    client = null;
+    reconnectWithRetry();
   }
 
   sendMessage(message) {
@@ -127,6 +133,21 @@ class WSClient {
       content: message.content,
     });
   }
+}
+
+let retryWait = MIN_RETRY_WAIT;
+function reconnectWithRetry() {
+  if (client !== null) {
+    retryWait = MIN_RETRY_WAIT;
+    return;
+  }
+  setTimeout(() => {
+    client = new WSClient();
+    retryWait *= 2;
+    if (retryWait > MAX_RETRY_WAIT) {
+      retryWait = MAX_RETRY_WAIT;
+    }
+  }, retryWait);
 }
 
 function requireClient() {

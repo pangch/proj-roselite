@@ -60,7 +60,7 @@ export default class ClientHandler {
         case "identity":
           return this.onIdentity(parsedMessage);
         case "get-users":
-          return this.onGetUsers(parsedMessage);
+          return this.onGetUsers();
         case "send-text-message":
           return this.onSendTextMessage(parsedMessage);
         default:
@@ -85,13 +85,13 @@ export default class ClientHandler {
       username: message.username,
       joinedAt: new Date(),
     };
-    this.onGetUsers();
-
     this.sendMessage({
       type: "identity",
       id: this.id,
       username: message.username,
     });
+
+    this.onGetUsers();
     sendBroadcast({
       type: "joined",
       user: {
@@ -104,7 +104,6 @@ export default class ClientHandler {
 
   onIdentity(message) {
     this.info.username = message.username;
-    this.info.isManualUserName = true;
     sendBroadcast({
       type: "update-user",
       user: {
@@ -114,12 +113,11 @@ export default class ClientHandler {
     });
   }
 
-  onGetUsers(message) {
+  onGetUsers() {
     const users = Array.from(clients.values()).map((client) => ({
       id: client.id,
       username: client.info.username,
       joinedAt: client.info.joinedAt,
-      isManualUsername: client.info.isManualUserName === true,
     }));
     this.sendMessage({
       type: "user-list",
