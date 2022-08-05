@@ -1,26 +1,25 @@
 import * as React from "react";
 import { useContext, useReducer, useEffect } from "react";
-import { subscribeLogger } from "../../../common/logger.js";
+import { getSessionInfo, subscribeSession } from "../utils/session.js";
 
 const StateContext = React.createContext();
 const DispatchContext = React.createContext();
 
-const MAX_ITEMS = 1000;
-
-const initialState = [];
-
 function reducer(state, action) {
-  if (action && action.type === "new") {
-    return [...state, action.item].slice(-MAX_ITEMS);
+  if (action) {
+    switch (action.type) {
+      case "update-id":
+        return { ...state, id: action.id };
+    }
   }
   return state;
 }
 
-export function ConsoleContextProvider(props) {
+export function SessionContextProvider(props) {
+  const initialState = getSessionInfo();
   const [state, dispatch] = useReducer(reducer, initialState);
-
   useEffect(() => {
-    return subscribeLogger(dispatch);
+    return subscribeSession(dispatch);
   }, []);
 
   return (
@@ -32,6 +31,6 @@ export function ConsoleContextProvider(props) {
   );
 }
 
-export function useConsoleContext() {
+export function useSessionContext() {
   return useContext(StateContext);
 }

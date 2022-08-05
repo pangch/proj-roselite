@@ -1,54 +1,34 @@
-let username = randomName();
+import Observable from "../../../common/observable.js";
 
-let usersContextDispatch = null;
+let users = [];
 
-let userState = {
-  username: randomName(),
-  users: [],
-};
+const usersObservable = new Observable();
 
-function randomName() {
-  const CHARACTERS =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-  const charactersLength = CHARACTERS.length;
-  const chars = [];
-  for (let i = 0; i < 8; i++) {
-    chars[i] = CHARACTERS.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return chars.join("");
+export function subscribeUsers(handler) {
+  return usersObservable.subscribe(handler);
 }
 
-export function setUsersContextDispatch(dispatch) {
-  usersContextDispatch = dispatch;
+export function getUsers() {
+  return users;
 }
 
-export function getUserState() {
-  return userState;
-}
+export function updateUserList(newUsers) {
+  users = newUsers;
 
-export function updateUserList(users) {
-  userState = {
-    ...userState,
-    users,
-  };
-
-  if (usersContextDispatch != null) {
-    usersContextDispatch({ type: "update" });
-  }
+  usersObservable.emit({ type: "update", users });
 }
 
 export function addUser(newUser) {
-  if (userState.users.find((user) => user.id === newUser.id)) {
+  if (users.find((user) => user.id === newUser.id)) {
     return;
   }
-  const newUsers = [...userState.users, newUser];
+  const newUsers = [...users, newUser];
   updateUserList(newUsers);
 }
 
 export function removeUser(userID) {
-  if (userState.users.find((user) => user.id === userID)) {
-    const newUsers = userState.users.filter((user) => user.id !== userID);
+  if (users.find((user) => user.id === userID)) {
+    const newUsers = users.filter((user) => user.id !== userID);
     updateUserList(newUsers);
   }
 }

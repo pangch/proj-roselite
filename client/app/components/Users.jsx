@@ -2,9 +2,16 @@ import * as React from "react";
 import { useUsersContext } from "../contexts/UsersContext";
 
 import classNames from "classnames";
+import { useSessionContext } from "../contexts/SessionContext";
 
 function UserItem({ user }) {
-  return <li className={classNames(user.isSelf && "self")}>{user.username}</li>;
+  const { id } = useSessionContext();
+  const isSelf = id != null && id === user.id;
+  return (
+    <li className={classNames(isSelf && "self", "user-item")}>
+      {user.username}
+    </li>
+  );
 }
 
 function UserList({ users }) {
@@ -12,12 +19,12 @@ function UserList({ users }) {
 }
 
 function UserListPlaceholder({ username }) {
-  return <li>{username}</li>;
+  return <li className="user-item">{username}</li>;
 }
 
 export default function Users() {
-  const usersState = useUsersContext();
-  const { username, users } = usersState;
+  const users = useUsersContext();
+  const { username } = useSessionContext();
   return (
     <section className="section-users grow-0">
       <ul>

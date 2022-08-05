@@ -1,7 +1,7 @@
 import { WebSocketServer } from "ws";
 import { v4 as uuid } from "uuid";
 
-import { createLogger } from "../utils/logger.js";
+import { createLogger } from "../../common/logger.js";
 import ClientHandler from "./client-handler.js";
 import { addHeartbeat, startHeartbeat, stopHeartbeat } from "./heartbeat.js";
 

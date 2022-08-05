@@ -19,6 +19,7 @@ body {
 ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 #app {
@@ -38,7 +39,17 @@ ul {
 }
 
 .section-users .self {
-  color: #DEF2F1
+  color: #DEF2F1;
+  font-weight: bold;
+}
+
+.section-users .user-item {
+  line-height: 1.8rem;
+  border-bottom: 1px solid #DEF2F1;
+}
+
+.section-users .user-item:last-child {
+  border-bottom: none;
 }
 
 .section-info {

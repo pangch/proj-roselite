@@ -1,10 +1,7 @@
-import { createLogger } from "../utils/logger.js";
-import {
-  addUser,
-  getUserState,
-  removeUser,
-  updateUserList,
-} from "../utils/users.js";
+import { createLogger } from "../../../common/logger.js";
+import { getSessionInfo, setSessionId } from "../utils/session.js";
+
+import { addUser, removeUser, updateUserList } from "../utils/users.js";
 
 const logger = createLogger("WebSocket");
 const server = `ws://${window.location.host}`;
@@ -25,8 +22,8 @@ class WSClient {
 
   handleOpen(event) {
     logger.info("Connection established");
-    const userState = getUserState();
-    const { username } = userState;
+    const sessionInfo = getSessionInfo();
+    const { username } = sessionInfo;
     this.sendMessage({
       type: "join",
       username,
@@ -80,7 +77,8 @@ class WSClient {
 
   onIdentity(message) {
     this.id = message.id;
-    logger.info(`Received user ID: ${this.id}`);
+    setSessionId(this.id);
+    logger.info(`Received session ID: ${this.id}`);
   }
 
   onJoined(message) {

@@ -1,5 +1,5 @@
 import WebSocket from "ws";
-import { createLogger } from "../utils/logger.js";
+import { createLogger } from "../../common/logger.js";
 
 const logger = createLogger("WSClientHandler");
 
@@ -102,7 +102,6 @@ export default class ClientHandler {
   onGetUsers(message) {
     const users = Array.from(clients.values()).map((client) => ({
       id: client.id,
-      isSelf: client.id === this.id,
       username: client.info.username,
       joinedAt: client.info.joinedAt,
     }));

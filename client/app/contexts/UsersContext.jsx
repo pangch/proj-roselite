@@ -1,21 +1,34 @@
 import * as React from "react";
-import { useContext, useReducer } from "react";
-import { getUserState, setUsersContextDispatch } from "../utils/users";
+import { sortBy, partition } from "lodash";
+import { useContext, useReducer, useEffect } from "react";
+import { getUsers, subscribeUsers } from "../utils/users";
+import { getSessionId } from "../utils/session";
 
 const StateContext = React.createContext();
 const DispatchContext = React.createContext();
 
+function sortUsers(users) {
+  const id = getSessionId();
+  const [self, others] = partition(
+    users,
+    (user) => id != null && id === user.id
+  );
+  return [...self, ...sortBy(others, (user) => user.username)];
+}
+
 function reducer(state, action) {
   if (action && action.type === "update") {
-    return getUserState();
+    return sortUsers(action.users);
   }
   return state;
 }
 
 export function UsersContextProvider(props) {
-  const initialState = getUserState();
+  const initialState = sortUsers(getUsers());
   const [state, dispatch] = useReducer(reducer, initialState);
-  setUsersContextDispatch(dispatch);
+  useEffect(() => {
+    return subscribeUsers(dispatch);
+  }, []);
 
   return (
     <DispatchContext.Provider value={dispatch}>
@@ -28,8 +41,4 @@ export function UsersContextProvider(props) {
 
 export function useUsersContext() {
   return useContext(StateContext);
-}
-
-export function useUsersReducer() {
-  return useContext(DispatchContext);
 }
