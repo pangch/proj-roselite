@@ -45,17 +45,24 @@ body {
   padding: 0.5rem;
 }
 
+.section-input {
+  border: 2px solid #FEFFFF;
+  border-top: 0;
+}
+
 .section-input textarea {
-  padding: 2px;
+  background: #2B7A78;
+  padding: 0.5rem;
   border: none;
   outline: none;
   resize: none;
+  color: #FEFFFF;
 }
 
 .section-console {
   font-family: 'Roboto Mono', monospace;
   font-size: small;
-  margin-top: 1rem;
+  margin-top: 2rem;
   padding: 0.5rem;
   min-height: 12rem;
   background: #17252A;
