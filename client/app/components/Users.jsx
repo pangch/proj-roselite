@@ -3,7 +3,7 @@ import { useState } from "react";
 import { isEmpty } from "lodash";
 import { useUsersContext } from "../contexts/UsersContext";
 import { useSessionContext } from "../contexts/SessionContext";
-import { getSessionInfo, setUsername } from "../utils/session";
+import { getSessionInfo, setUsername } from "../models/session";
 
 function UserSelfEditor({ user, onDone }) {
   const [name, setName] = useState(user.username);
@@ -45,7 +45,7 @@ function UserSelf({ user }) {
       </span>
       <span className="icon-button grow-0" onClick={() => setIsEdit(true)}>
         <i className="fa fa-pencil" />
-        Change
+        Rename
       </span>
     </li>
   );

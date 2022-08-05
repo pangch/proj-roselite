@@ -1,8 +1,8 @@
 import * as React from "react";
 import { sortBy, partition } from "lodash";
 import { useContext, useReducer, useEffect } from "react";
-import { getUsers, subscribeUsers } from "../utils/users";
-import { getSessionId } from "../utils/session";
+import { getUsers, subscribeUsers } from "../models/users";
+import { getSessionId } from "../models/session";
 
 const StateContext = React.createContext();
 const DispatchContext = React.createContext();

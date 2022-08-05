@@ -3,8 +3,8 @@ import { useEffect, useRef } from "react";
 import classNames from "classnames";
 import { isEmpty } from "lodash";
 import { useMessagesContext } from "../contexts/MessagesContext";
-import { getSessionId } from "../utils/session";
-import { getUserNameFromId } from "../utils/users";
+import { getSessionId } from "../models/session";
+import { getUserNameFromId } from "../models/users";
 
 function EmptyPlaceholder() {
   return <div>No messages</div>;

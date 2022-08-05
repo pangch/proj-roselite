@@ -1,6 +1,6 @@
 import { createLogger } from "../../../common/logger.js";
-import { appendMessage } from "../utils/messages.js";
-import { getSessionInfo, setSessionId } from "../utils/session.js";
+import { appendMessage } from "../models/messages.js";
+import { getSessionInfo, setSessionId } from "../models/session.js";
 
 import {
   addUser,
@@ -8,7 +8,7 @@ import {
   removeUser,
   updateUser,
   updateUserList,
-} from "../utils/users.js";
+} from "../models/users.js";
 
 const logger = createLogger("WebSocket");
 const server = `ws://${window.location.host}`;

@@ -1,29 +1,20 @@
 import * as React from "react";
 import { useContext, useReducer, useEffect } from "react";
-import { getSessionInfo, subscribeSession } from "../models/session.js";
+import { getVideos, subscribeVideos } from "../models/videos";
 
 const StateContext = React.createContext();
 const DispatchContext = React.createContext();
 
+const initialState = [];
+
 function reducer(state, action) {
-  if (action) {
-    switch (action.type) {
-      case "update-id":
-        return { ...state, id: action.id };
-      case "update":
-        const ns = getSessionInfo();
-        console.log("new session", ns);
-        return ns;
-    }
-  }
   return state;
 }
 
-export function SessionContextProvider(props) {
-  const initialState = getSessionInfo();
+export function VideosContextProvider(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
-    return subscribeSession(dispatch);
+    return subscribeVideos(dispatch);
   }, []);
 
   return (
@@ -35,6 +26,6 @@ export function SessionContextProvider(props) {
   );
 }
 
-export function useSessionContext() {
+export function useVideosContext() {
   return useContext(StateContext);
 }

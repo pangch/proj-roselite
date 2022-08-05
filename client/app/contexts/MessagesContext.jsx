@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useContext, useReducer, useEffect } from "react";
-import { subscribeMessages } from "../utils/messages.js";
+import { subscribeMessages } from "../models/messages.js";
 
 const StateContext = React.createContext();
 const DispatchContext = React.createContext();

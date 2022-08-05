@@ -4,6 +4,7 @@ import { ConsoleContextProvider } from "./contexts/ConsoleContext";
 import { MessagesContextProvider } from "./contexts/MessagesContext";
 import { SessionContextProvider } from "./contexts/SessionContext";
 import { UsersContextProvider } from "./contexts/UsersContext";
+import { VideosContextProvider } from "./contexts/VideosContext";
 import Layout from "./Layout";
 import ServicesInitializer from "./ServicesInitializer";
 
@@ -13,8 +14,10 @@ export default function App() {
       <ConsoleContextProvider>
         <MessagesContextProvider>
           <SessionContextProvider>
-            <ServicesInitializer />
-            <Layout />
+            <VideosContextProvider>
+              <ServicesInitializer />
+              <Layout />
+            </VideosContextProvider>
           </SessionContextProvider>
         </MessagesContextProvider>
       </ConsoleContextProvider>
