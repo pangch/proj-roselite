@@ -4,12 +4,11 @@ import classNames from "classnames";
 
 import { useConsoleContext } from "../contexts/ConsoleContext";
 
-const dateTimeFormat = new Intl.DateTimeFormat("en");
-
 function ConsoleItem({ item }) {
   return (
     <div className={classNames("console-item", "flex", item.level)}>
       <div className="time shrink-0">{item?.time?.toISOString()}</div>
+      <div>{`[${item?.level}]`}</div>
       <div className="grow">{item?.message}</div>
     </div>
   );
@@ -17,22 +16,23 @@ function ConsoleItem({ item }) {
 
 export default function Console() {
   const consoleMessages = useConsoleContext();
-  const messagesEndRef = useRef(null);
+  const scrollAreaRef = useRef(null);
 
   const count = consoleMessages.length;
   useEffect(() => {
-    const delayed = window.setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView();
-    }, 200);
-    return () => window.clearTimeout(delayed);
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+    }
   }, [count]);
 
   return (
-    <section className="section-console grow-0">
+    <section
+      className="section-console grow-0 overflow-y-scroll"
+      ref={scrollAreaRef}
+    >
       {consoleMessages?.map((item) => (
         <ConsoleItem key={item.id} item={item} />
       ))}
-      <div ref={messagesEndRef} />
     </section>
   );
 }

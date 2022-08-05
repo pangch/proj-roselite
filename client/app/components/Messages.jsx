@@ -30,7 +30,7 @@ function TextMessageItem({ message, isSelf }) {
       )}
     >
       <div className="username">{username}</div>
-      <div className="content">{message.content}</div>
+      <pre className="content">{message.content}</pre>
     </li>
   );
 }
@@ -65,24 +65,25 @@ function MessageList({ messages }) {
 
 export default function Messages() {
   const messages = useMessagesContext();
-  const messagesEndRef = useRef(null);
+  const scrollAreaRef = useRef(null);
 
   const count = messages.length;
   useEffect(() => {
-    const delayed = window.setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView();
-    }, 50);
-    return () => window.clearTimeout(delayed);
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+    }
   }, [count]);
 
   return (
-    <section className="section-messages grow overflow-y-scroll basis-0">
+    <section
+      className="section-messages grow overflow-y-scroll basis-0"
+      ref={scrollAreaRef}
+    >
       {isEmpty(messages) ? (
         <EmptyPlaceholder />
       ) : (
         <MessageList messages={messages} />
       )}
-      <div ref={messagesEndRef} />
     </section>
   );
 }

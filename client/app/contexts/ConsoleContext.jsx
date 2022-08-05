@@ -10,7 +10,7 @@ const MAX_ITEMS = 1000;
 const initialState = [];
 
 function reducer(state, action) {
-  if (action && action.type === "new") {
+  if (action && action.type === "new" && action.item.level !== "debug") {
     return [...state, action.item].slice(-MAX_ITEMS);
   }
   return state;
