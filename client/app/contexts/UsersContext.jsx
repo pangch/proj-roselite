@@ -1,17 +1,22 @@
 import * as React from "react";
 import { useContext, useReducer } from "react";
+import { getUserState, setUsersContextDispatch } from "../utils/users";
 
 const StateContext = React.createContext();
 const DispatchContext = React.createContext();
 
-const initialState = {
-  current: {},
-};
-
-function reducer(state, action) {}
+function reducer(state, action) {
+  if (action && action.type === "update") {
+    return getUserState();
+  }
+  return state;
+}
 
 export function UsersContextProvider(props) {
+  const initialState = getUserState();
   const [state, dispatch] = useReducer(reducer, initialState);
+  setUsersContextDispatch(dispatch);
+
   return (
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={state}>

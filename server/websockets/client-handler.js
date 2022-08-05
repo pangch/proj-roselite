@@ -1,3 +1,4 @@
+import WebSocket from "ws";
 import { createLogger } from "../utils/logger.js";
 
 const logger = createLogger("WSClientHandler");
@@ -10,18 +11,20 @@ export function getClients() {
 
 export function serverBroadcast(message) {
   logger.debug(`Broadcasting message: ${message}`);
-  for ([id, handler] of clients) {
-    handler.sendMessage(message);
+  for (let client of clients.values()) {
+    client.sendMessage(message);
   }
 }
 
 export default class ClientHandler {
   constructor(id, websocket, request) {
     this.id = id;
+    this.info = {};
+
     this.websocket = websocket;
     this.request = request;
     this.logger = createLogger(`WSClientHandler:${id}`);
-    console.log("Logger", this.logger);
+
     this.logger.info("Client connected");
     clients.set(id, this);
 
@@ -33,6 +36,11 @@ export default class ClientHandler {
   handleClose() {
     this.logger.info("Client disconnected");
     clients.delete(this.id);
+
+    serverBroadcast({
+      type: "left",
+      id: this.id,
+    });
   }
 
   handleError(error) {
@@ -54,7 +62,7 @@ export default class ClientHandler {
           this.logger.warn(`Unhandled message: ${message}`);
       }
     } catch (error) {
-      this.logger.error(`Failed to handle message: ${message}`);
+      this.logger.error(`Failed to handle message: ${message}`, error);
     }
   }
 
@@ -68,17 +76,39 @@ export default class ClientHandler {
   }
 
   onJoin(message) {
-    this.username = message.username;
+    this.info = {
+      username: message.username,
+      joinedAt: new Date(),
+    };
+    this.onGetUsers();
 
     this.sendMessage({
-      type: "joined",
+      type: "identity",
       id: this.id,
+      username: message.username,
     });
-
-    this.onGetUsers();
+    serverBroadcast({
+      type: "joined",
+      user: {
+        id: this.id,
+        username: message.username,
+        joinedAt: this.info.joinedAt,
+      },
+    });
   }
 
   onIdentity(message) {}
 
-  onGetUsers(message) {}
+  onGetUsers(message) {
+    const users = Array.from(clients.values()).map((client) => ({
+      id: client.id,
+      isSelf: client.id === this.id,
+      username: client.info.username,
+      joinedAt: client.info.joinedAt,
+    }));
+    this.sendMessage({
+      type: "user-list",
+      users,
+    });
+  }
 }

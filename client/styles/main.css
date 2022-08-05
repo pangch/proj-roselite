@@ -16,6 +16,11 @@ body {
   padding: 0;
 }
 
+ul {
+  list-style: none;
+  padding: 0;
+}
+
 #app {
   margin: 0;
   padding: 0;
@@ -65,9 +70,10 @@ body {
   font-size: small;
   margin-top: 2rem;
   padding: 0.5rem;
-  min-height: 12rem;
+  height: 12rem;
   background: #17252A;
   color: #FEFFFF;
+  overflow-y: scroll;
 }
 
 .console-item .time {
