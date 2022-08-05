@@ -26,7 +26,7 @@ export default function Users() {
   const users = useUsersContext();
   const { username } = useSessionContext();
   return (
-    <section className="section-users grow-0">
+    <section className="section-users grow">
       <ul>
         {users != null && users?.length > 0 ? (
           <UserList users={users} />

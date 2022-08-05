@@ -18,6 +18,10 @@
   flex-shrink: 0;
 }
 
+.basis-1\/5 {
+  flex-basis: 20%;
+}
+
 .h-screen {
   height: 100vh;
 }
