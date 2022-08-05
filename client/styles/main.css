@@ -96,6 +96,66 @@ ul {
   padding: 0.5rem;
 }
 
+.section-messages .message {
+  margin: 0.2rem 0;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
+  max-width: 80%;
+}
+
+.section-messages .status-message {
+  background: #2B7A78;
+  color: #DEF2F1;
+  font-size: x-small;
+  font-weight: lighter;
+}
+
+.section-messages .text-message .username {
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  font-weight: bold;
+  font-size: x-small;
+  padding-bottom: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.section-messages .text-message .content {
+  font-weight: lighter;
+}
+
+.section-messages .text-message.sent-message {
+  background: #2B7A78;
+  color: #DEF2F1;
+  border-bottom-color: #DEF2F1;
+  align-self: flex-end;
+}
+
+.section-messages .text-message.sent-message .username {
+  text-align: right;
+}
+
+.section-messages .text-message.sent-message .content {
+  text-align: right;
+  color: #FEFFFF;
+  font-size: small;
+}
+
+.section-messages .text-message.received-message {
+  background: #FEFFFF;
+  color: #2B7A78;
+  border-bottom-color: #2B7A78;
+  align-self: flex-start;
+}
+
+.section-messages .text-message.received-message .username {
+  text-align: left;
+}
+
+.section-messages .text-message.received-message .content {
+  text-align: left;
+  color:#17252A;
+}
+
 .section-input {
   border: 2px solid #FEFFFF;
   border-top: 0;

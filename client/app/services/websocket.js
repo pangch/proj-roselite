@@ -1,8 +1,10 @@
 import { createLogger } from "../../../common/logger.js";
+import { appendMessage } from "../utils/messages.js";
 import { getSessionInfo, setSessionId } from "../utils/session.js";
 
 import {
   addUser,
+  getUserFromId,
   removeUser,
   updateUser,
   updateUserList,
@@ -52,6 +54,8 @@ class WSClient {
           return this.onUserList(parsedMessage);
         case "update-user":
           return this.onUpdateUser(parsedMessage);
+        case "receive-text-message":
+          return this.onReceiveTextMessage(parsedMessage);
         default:
           logger.warn(`Unhandled message: ${message}`);
       }
@@ -90,10 +94,22 @@ class WSClient {
 
   onJoined(message) {
     addUser(message.user);
+    appendMessage({
+      type: "status",
+      userId: message.user.id,
+      content: `${message.user.username} joined.`,
+    });
   }
 
   onLeft(message) {
+    const user = getUserFromId(message.id);
     removeUser(message.id);
+
+    appendMessage({
+      type: "status",
+      userId: message.id,
+      content: `${user.username} left.`,
+    });
   }
 
   onUserList(message) {
@@ -102,6 +118,14 @@ class WSClient {
 
   onUpdateUser(message) {
     updateUser(message.user);
+  }
+
+  onReceiveTextMessage(message) {
+    appendMessage({
+      type: "text",
+      userId: message.userId,
+      content: message.content,
+    });
   }
 }
 
@@ -115,6 +139,10 @@ function requireClient() {
 
 export function notifyUsername(username) {
   requireClient()?.sendMessage({ type: "identity", username });
+}
+
+export function sendTextMessage(content) {
+  requireClient()?.sendMessage({ type: "send-text-message", content });
 }
 
 export function initWebSocket() {

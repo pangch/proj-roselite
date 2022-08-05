@@ -9,7 +9,10 @@ export function getClients() {
   return clients.values();
 }
 
-export function serverBroadcast(message) {
+export function sendBroadcast(message) {
+  if (typeof message !== "string") {
+    message = JSON.stringify(message);
+  }
   logger.debug(`Broadcasting message: ${message}`);
   for (let client of clients.values()) {
     client.sendMessage(message);
@@ -37,7 +40,7 @@ export default class ClientHandler {
     this.logger.info("Client disconnected");
     clients.delete(this.id);
 
-    serverBroadcast({
+    sendBroadcast({
       type: "left",
       id: this.id,
     });
@@ -58,6 +61,8 @@ export default class ClientHandler {
           return this.onIdentity(parsedMessage);
         case "get-users":
           return this.onGetUsers(parsedMessage);
+        case "send-text-message":
+          return this.onSendTextMessage(parsedMessage);
         default:
           this.logger.warn(`Unhandled message: ${message}`);
       }
@@ -87,7 +92,7 @@ export default class ClientHandler {
       id: this.id,
       username: message.username,
     });
-    serverBroadcast({
+    sendBroadcast({
       type: "joined",
       user: {
         id: this.id,
@@ -100,7 +105,7 @@ export default class ClientHandler {
   onIdentity(message) {
     this.info.username = message.username;
     this.info.isManualUserName = true;
-    serverBroadcast({
+    sendBroadcast({
       type: "update-user",
       user: {
         id: this.id,
@@ -119,6 +124,15 @@ export default class ClientHandler {
     this.sendMessage({
       type: "user-list",
       users,
+    });
+  }
+
+  onSendTextMessage(message) {
+    sendBroadcast({
+      type: "receive-text-message",
+      userId: this.id,
+      content: message.content,
+      sentAt: new Date(),
     });
   }
 }

@@ -19,6 +19,10 @@ export function updateUserList(newUsers) {
   usersObservable.emit({ type: "update", users });
 }
 
+export function getUserFromId(userId) {
+  return users.find((user) => user.id === userId);
+}
+
 export function addUser(newUser) {
   if (users.find((user) => user.id === newUser.id)) {
     return;

@@ -40,7 +40,7 @@ function UserSelf({ user }) {
   }
   return (
     <li className="user-item self flex items-center">
-      <span className="grow">
+      <span className="grow basis-0 truncate">
         <span className="truncate">{username}</span>
       </span>
       <span className="icon-button grow-0" onClick={() => setIsEdit(true)}>
@@ -53,7 +53,9 @@ function UserSelf({ user }) {
 
 function UserOther({ user }) {
   return (
-    <li className="user-item flex items-center truncate">{user.username}</li>
+    <li className="user-item flex items-center basis-0 truncate">
+      {user.username}
+    </li>
   );
 }
 

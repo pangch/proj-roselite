@@ -16,16 +16,20 @@ function ConsoleItem({ item }) {
 }
 
 export default function Console() {
-  const consoleState = useConsoleContext();
+  const consoleMessages = useConsoleContext();
   const messagesEndRef = useRef(null);
 
+  const count = consoleMessages.length;
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [consoleState]);
+    const delayed = window.setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView();
+    }, 200);
+    return () => window.clearTimeout(delayed);
+  }, [count]);
 
   return (
     <section className="section-console grow-0">
-      {consoleState?.map((item) => (
+      {consoleMessages?.map((item) => (
         <ConsoleItem key={item.id} item={item} />
       ))}
       <div ref={messagesEndRef} />
