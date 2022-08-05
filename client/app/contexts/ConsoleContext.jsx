@@ -7,21 +7,11 @@ const DispatchContext = React.createContext();
 const MAX_ITEMS = 1000;
 let currentId = 0;
 
-const initialState = [
-  {
-    id: currentId++,
-    level: "info",
-    time: new Date(),
-    message: "Loading...",
-  },
-];
+const initialState = [];
 
 function reducer(state, action) {
   if (action && action.type === "append") {
-    const newState = [...state, action.item].slice(-MAX_ITEMS);
-    console.log("appending", action, newState);
-
-    return newState;
+    return [...state, action.item].slice(-MAX_ITEMS);
   }
   return state;
 }

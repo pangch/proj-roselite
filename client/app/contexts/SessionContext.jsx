@@ -10,7 +10,7 @@ const initialState = {
 
 function reducer(state, action) {}
 
-export function UsersContextProvider(props) {
+export function SessionContextProvider(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
     <DispatchContext.Provider value={dispatch}>
@@ -21,10 +21,10 @@ export function UsersContextProvider(props) {
   );
 }
 
-export function useUsersContext() {
+export function useSessionContext() {
   return useContext(StateContext);
 }
 
-export function useUsersReducer() {
+export function useSessionReducer() {
   return useContext(DispatchContext);
 }
