@@ -37,6 +37,10 @@ ul {
   padding: 0.5rem;
 }
 
+.section-users .self {
+  color: #DEF2F1
+}
+
 .section-info {
   border: 2px solid #FEFFFF;
   min-width: 18rem;

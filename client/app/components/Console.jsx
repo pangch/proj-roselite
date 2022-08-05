@@ -9,7 +9,7 @@ const dateTimeFormat = new Intl.DateTimeFormat("en");
 function ConsoleItem({ item }) {
   return (
     <div className={classNames("console-item", "flex", item.level)}>
-      <div className="time">{item?.time?.toISOString()}</div>
+      <div className="time shrink-0">{item?.time?.toISOString()}</div>
       <div className="grow">{item?.message}</div>
     </div>
   );

@@ -1,8 +1,10 @@
 import * as React from "react";
 import { useUsersContext } from "../contexts/UsersContext";
 
+import classNames from "classnames";
+
 function UserItem({ user }) {
-  return <li>{user.username}</li>;
+  return <li className={classNames(user.isSelf && "self")}>{user.username}</li>;
 }
 
 function UserList({ users }) {
