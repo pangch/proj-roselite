@@ -6,7 +6,7 @@ export function initWebSocket(loggerImp) {
     loggerImp(`[WebSocket] ${message}`, level);
   };
 
-  const server = `ws://${window.location.host}/ws`;
+  const server = `ws://${window.location.host}`;
 
   logger(`Connecting to WebSocket server: ${server}`);
 
@@ -14,7 +14,7 @@ export function initWebSocket(loggerImp) {
 
   socket.onopen = function (e) {
     logger("Connection established");
-    socket.send("My name is John");
+    socket.send(JSON.stringify({ message: "Hello" }));
   };
 
   socket.onmessage = function (event) {

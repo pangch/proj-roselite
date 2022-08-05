@@ -10,11 +10,11 @@ async function boot() {
   app.use(morgan("combined"));
   app.use(express.static("dist/public"));
 
-  await websockets(app);
-
-  app.listen(port, () => {
+  const server = app.listen(port, () => {
     console.log(`Server listening on ${port}`);
   });
+
+  await websockets(server);
 }
 
 await boot();
