@@ -62,3 +62,6 @@ body {
   color: #FEFFFF;
 }
 
+.console-item .time {
+  width: 16em;
+}

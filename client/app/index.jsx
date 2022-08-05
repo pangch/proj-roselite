@@ -6,22 +6,25 @@ import Messages from "./components/Messages";
 import Input from "./components/Input";
 import Info from "./components/Info";
 import Console from "./components/Console";
+import { ConsoleContextProvider } from "./contexts/ConsoleContext";
 
 export default function App() {
   return (
-    <div className="flex flex-col grow h-screen">
-      <Title />
-      <div className="flex grow">
-        <Users />
-        <div className="flex flex-col grow">
-          <Messages />
-          <Input />
+    <ConsoleContextProvider>
+      <div className="flex flex-col grow h-screen">
+        <Title />
+        <div className="flex grow">
+          <Users />
+          <div className="flex flex-col grow">
+            <Messages />
+            <Input />
+          </div>
+          <div className="flex flex-col grow-0">
+            <Info />
+          </div>
         </div>
-        <div className="flex flex-col grow-0">
-          <Info />
-        </div>
+        <Console />
       </div>
-      <Console />
-    </div>
+    </ConsoleContextProvider>
   );
 }
