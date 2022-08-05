@@ -1,30 +1,32 @@
 import { WebSocketServer } from "ws";
+import { v4 as uuid } from "uuid";
 
-function logger(message) {
-  console.log(`[WS] ${message}`);
-}
+import { createLogger } from "../utils/logger.js";
+import ClientHandler from "./client-handler.js";
+import { addHeartbeat, startHeartbeat, stopHeartbeat } from "./heartbeat.js";
+
+const logger = createLogger("WebSocket");
 
 export default async function (server) {
-  logger("Initializing WebSocket server");
+  logger.info("Initializing WebSocket server");
   const wss = new WebSocketServer({ noServer: true });
 
-  server.on("upgrade", (request, socket, head) => {
-    logger("Upgrade");
+  server.on("upgrade", async (request, socket, head) => {
+    logger.info("Client attempting to upgrade");
     wss.handleUpgrade(request, socket, head, (websocket) => {
       wss.emit("connection", websocket, request);
     });
   });
 
-  wss.on(
-    "connection",
-    function connection(websocketConnection, connectionRequest) {
-      logger("Connected");
-      websocketConnection.on("message", (message) => {
-        logger(`Received message: ${message}`);
-        const parsedMessage = JSON.parse(message);
-      });
-    }
-  );
+  wss.on("connection", function connection(websocket, request) {
+    const id = uuid();
+    const client = new ClientHandler(id, websocket, request);
+    addHeartbeat(client);
+  });
+
+  wss.on("close", () => stopHeartbeat());
+
+  startHeartbeat(wss);
 
   return wss;
 }
