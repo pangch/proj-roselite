@@ -1,24 +1,21 @@
 import * as React from "react";
 import { useEffect } from "react";
-import { useLogger } from "./contexts/ConsoleContext";
 import { initWebSocket } from "./services/websocket";
 
 let initialized = false;
 
-function initServices(logger) {
+function initServices() {
   if (initialized) {
     return;
   }
   initialized = true;
 
-  initWebSocket(logger);
+  initWebSocket();
 }
 
-export default function ServicesProvider() {
-  const logger = useLogger();
-
+export default function ServicesInitializer() {
   useEffect(() => {
-    initServices(logger);
+    initServices();
   }, []);
   return null;
 }

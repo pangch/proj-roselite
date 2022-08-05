@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useContext, useReducer, useCallback } from "react";
+import { setConsoleContextDispatch } from "../utils/logger";
 
 const StateContext = React.createContext();
 const DispatchContext = React.createContext();
@@ -18,6 +19,7 @@ function reducer(state, action) {
 
 export function ConsoleContextProvider(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  setConsoleContextDispatch(dispatch);
   return (
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={state}>
@@ -29,21 +31,4 @@ export function ConsoleContextProvider(props) {
 
 export function useConsoleContext() {
   return useContext(StateContext);
-}
-
-export function useLogger() {
-  const dispatch = useContext(DispatchContext);
-  return useCallback((message, level) => {
-    const id = currentId++;
-    dispatch({
-      type: "append",
-      item: {
-        id,
-        level: level ?? "debug",
-        time: new Date(),
-        message,
-      },
-    });
-    return id;
-  });
 }
