@@ -27,6 +27,26 @@ ul {
   padding: 0;
 }
 
+.icon-button {
+  display: inline;
+  margin-left: 0.25rem;
+  min-width: 2rem;
+  padding: 0 0.5rem;
+  font-size: x-small;
+  background: #2B7A78;
+  border-radius: 2px;
+  cursor:pointer;
+}
+
+.icon-button:hover {
+  background: #DEF2F1;
+  color: #2B7A78;
+}
+
+.icon-button .fa {
+  margin-right: 0.25rem;
+}
+
 .section-title {
   padding: 0.5rem 2rem;
 }
@@ -38,13 +58,23 @@ ul {
   padding: 0.5rem;
 }
 
+.section-users input {
+  background: #2B7A78;
+  padding: 0.2rem 0.5rem;
+  border: none;
+  outline: none;
+  resize: none;
+  color: #FEFFFF;
+}
+
 .section-users .self {
   color: #DEF2F1;
   font-weight: bold;
 }
 
 .section-users .user-item {
-  line-height: 1.8rem;
+  line-height: 1.5rem;
+  height: 2.0em;
   border-bottom: 1px solid #DEF2F1;
 }
 

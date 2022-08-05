@@ -18,10 +18,20 @@
   flex-shrink: 0;
 }
 
+.items-center {
+  align-items: center;
+}
+
 .basis-1\/5 {
   flex-basis: 20%;
 }
 
 .h-screen {
   height: 100vh;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

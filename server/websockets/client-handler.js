@@ -97,13 +97,24 @@ export default class ClientHandler {
     });
   }
 
-  onIdentity(message) {}
+  onIdentity(message) {
+    this.info.username = message.username;
+    this.info.isManualUserName = true;
+    serverBroadcast({
+      type: "update-user",
+      user: {
+        id: this.id,
+        ...this.info,
+      },
+    });
+  }
 
   onGetUsers(message) {
     const users = Array.from(clients.values()).map((client) => ({
       id: client.id,
       username: client.info.username,
       joinedAt: client.info.joinedAt,
+      isManualUsername: client.info.isManualUserName === true,
     }));
     this.sendMessage({
       type: "user-list",

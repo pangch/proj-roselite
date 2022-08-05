@@ -1,7 +1,12 @@
 import { createLogger } from "../../../common/logger.js";
 import { getSessionInfo, setSessionId } from "../utils/session.js";
 
-import { addUser, removeUser, updateUserList } from "../utils/users.js";
+import {
+  addUser,
+  removeUser,
+  updateUser,
+  updateUserList,
+} from "../utils/users.js";
 
 const logger = createLogger("WebSocket");
 const server = `ws://${window.location.host}`;
@@ -45,6 +50,8 @@ class WSClient {
           return this.onLeft(parsedMessage);
         case "user-list":
           return this.onUserList(parsedMessage);
+        case "update-user":
+          return this.onUpdateUser(parsedMessage);
         default:
           logger.warn(`Unhandled message: ${message}`);
       }
@@ -92,6 +99,22 @@ class WSClient {
   onUserList(message) {
     updateUserList(message.users);
   }
+
+  onUpdateUser(message) {
+    updateUser(message.user);
+  }
+}
+
+function requireClient() {
+  if (client == null) {
+    logger.error("Cannot send WS message because no active connection.");
+    return;
+  }
+  return client;
+}
+
+export function notifyUsername(username) {
+  requireClient()?.sendMessage({ type: "identity", username });
 }
 
 export function initWebSocket() {

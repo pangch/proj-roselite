@@ -1,3 +1,4 @@
+import { merge } from "lodash";
 import Observable from "../../../common/observable.js";
 
 let users = [];
@@ -30,5 +31,13 @@ export function removeUser(userID) {
   if (users.find((user) => user.id === userID)) {
     const newUsers = users.filter((user) => user.id !== userID);
     updateUserList(newUsers);
+  }
+}
+
+export function updateUser(newUser) {
+  const oldUser = users.find((user) => user.id === newUser.id);
+  if (oldUser != null) {
+    merge(oldUser, newUser);
+    usersObservable.emit({ type: "update", users });
   }
 }

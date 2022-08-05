@@ -1,8 +1,10 @@
 import { range } from "lodash";
 import Observable from "../../../common/observable.js";
+import { notifyUsername } from "../services/websocket.js";
 
 let id = null;
 let username = randomName();
+let isManualUsername = false;
 
 const sessionObservable = new Observable();
 
@@ -25,6 +27,14 @@ export function setSessionId(newId) {
   sessionObservable.emit({ type: "update-id", id });
 }
 
+export function setUsername(newUsername) {
+  username = newUsername;
+  isManualUsername = true;
+  sessionObservable.emit({ type: "update" });
+
+  notifyUsername(username);
+}
+
 export function getSessionId() {
   return id;
 }
@@ -33,5 +43,6 @@ export function getSessionInfo() {
   return {
     id,
     username,
+    isManualUsername,
   };
 }
