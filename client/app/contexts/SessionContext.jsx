@@ -11,9 +11,7 @@ function reducer(state, action) {
       case "update-id":
         return { ...state, id: action.id };
       case "update":
-        const ns = getSessionInfo();
-        console.log("new session", ns);
-        return ns;
+        return getSessionInfo();
     }
   }
   return state;

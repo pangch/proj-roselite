@@ -24,7 +24,7 @@ export default function Input() {
   return (
     <section className="section-input flex flex-col" autoFocus>
       <textarea
-        rows="5"
+        rows="3"
         value={text}
         onChange={(event) => setText(event.target.value)}
         onKeyPress={handleKeyPress}

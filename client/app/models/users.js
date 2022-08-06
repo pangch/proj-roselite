@@ -21,7 +21,8 @@ export function updateUserList(newUsers) {
     usernameMap.set(user.id, user.username);
   });
 
-  usersObservable.emit({ type: "update", users });
+  usersObservable.emit({ type: "update-usernames", usernames: usernameMap });
+  usersObservable.emit({ type: "update-users", users });
 }
 
 export function getUserFromId(userId) {
@@ -53,6 +54,7 @@ export function updateUser(newUser) {
   if (oldUser != null) {
     merge(oldUser, newUser);
     usernameMap.set(newUser.id, newUser.username);
-    usersObservable.emit({ type: "update", users });
+    usersObservable.emit({ type: "update-usernames", usernames: usernameMap });
+    usersObservable.emit({ type: "update-users", users });
   }
 }

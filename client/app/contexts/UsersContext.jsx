@@ -17,14 +17,18 @@ function sortUsers(users) {
 }
 
 function reducer(state, action) {
-  if (action && action.type === "update") {
-    return sortUsers(action.users);
+  switch (action?.type) {
+    case "update-users":
+      return { ...state, users: sortUsers(action.users) };
+    case "update-usernames":
+      return { ...state, usernames: action.usernames };
+    default:
+      return state;
   }
-  return state;
 }
 
 export function UsersContextProvider(props) {
-  const initialState = sortUsers(getUsers());
+  const initialState = { users: sortUsers(getUsers()) };
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
     return subscribeUsers(dispatch);
@@ -41,4 +45,12 @@ export function UsersContextProvider(props) {
 
 export function useUsersContext() {
   return useContext(StateContext);
+}
+
+export function useUserNameFromId(userId) {
+  const { usernames } = useUsersContext();
+  if (usernames == null) {
+    return null;
+  }
+  return usernames.get(userId);
 }

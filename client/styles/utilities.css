@@ -6,6 +6,10 @@
   flex-direction: column;
 }
 
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 .grow {
   flex-grow: 1;
 }
@@ -42,6 +46,10 @@
   flex-basis: 20%;
 }
 
+.basis-1\/4 {
+  flex-basis: 25%;
+}
+
 .h-screen {
   height: 100vh;
 }
@@ -54,4 +62,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.hidden {
+  display: none;
 }

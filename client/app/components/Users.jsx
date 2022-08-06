@@ -4,6 +4,8 @@ import { isEmpty } from "lodash";
 import { useUsersContext } from "../contexts/UsersContext";
 import { useSessionContext } from "../contexts/SessionContext";
 import { getSessionInfo, setUsername } from "../models/session";
+import { startLocalVideo, stopLocalVideo } from "../services/rtc/local-media";
+import { useVideoInfoForUserId } from "../contexts/VideosContext";
 
 function UserSelfEditor({ user, onDone }) {
   const [name, setName] = useState(user.username);
@@ -32,6 +34,31 @@ function UserSelfEditor({ user, onDone }) {
   );
 }
 
+function VideoButton({ user }) {
+  const videoInfo = useVideoInfoForUserId(user.id);
+  if (videoInfo != null) {
+    return (
+      <span
+        className="icon-button grow-0"
+        onClick={() => stopLocalVideo(user.id)}
+      >
+        <i className="fa fa-video-camera" />
+        Stop
+      </span>
+    );
+  } else {
+    return (
+      <span
+        className="icon-button grow-0"
+        onClick={() => startLocalVideo(user.id)}
+      >
+        <i className="fa fa-video-camera" />
+        Start
+      </span>
+    );
+  }
+}
+
 function UserSelf({ user }) {
   const [isEdit, setIsEdit] = useState(false);
   const { username } = getSessionInfo();
@@ -47,6 +74,7 @@ function UserSelf({ user }) {
         <i className="fa fa-pencil" />
         Rename
       </span>
+      <VideoButton user={user} />
     </li>
   );
 }
@@ -78,7 +106,7 @@ function UserListPlaceholder({ username }) {
 }
 
 export default function Users() {
-  const users = useUsersContext();
+  const { users } = useUsersContext();
   const { username } = useSessionContext();
   return (
     <section className="section-users grow">
