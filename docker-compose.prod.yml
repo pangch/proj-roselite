@@ -31,6 +31,17 @@ services:
     networks:
       - intern
 
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - webserver
+    command: certonly --webroot --webroot-path=/var/www/html --email echevil@gmail.com --agree-tos --no-eff-email --staging -d chenpang.dev  -d www.chenpang.dev -d webrtc.chenpang.dev
+
 volumes:
   certbot-etc:
   certbot-var:
