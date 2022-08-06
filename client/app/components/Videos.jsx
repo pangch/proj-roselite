@@ -15,7 +15,7 @@ function VideoItem({ userId }) {
     };
   }, [userId]);
 
-  return <video className="video" ref={videoRef}></video>;
+  return <video className="video" ref={videoRef} autoPlay playsInline />;
 }
 
 function VideoContainer({ video }) {

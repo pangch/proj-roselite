@@ -8,6 +8,7 @@ services:
     ports:
       - "8080:3000"
     working_dir: /app
+    container_name: appserver
     command: npm run start
     restart: unless-stopped
     volumes:

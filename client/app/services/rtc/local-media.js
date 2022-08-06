@@ -17,7 +17,6 @@ let constraints = {
 
 class LocalMediaController {
   constructor(userId) {
-    this.isActive = false;
     this.userId = userId;
     this.videoElement = getVideoElementForUserId(userId);
 
@@ -29,27 +28,18 @@ class LocalMediaController {
   }
 
   async startIfReady() {
-    if (this.isActive) {
-      return;
-    }
     if (this.userId == null || this.videoElement == null) {
       return;
     }
 
-    this.isActive = true;
     try {
-      console.log(navigator);
-      console.log(navigator.mediaDevices);
-      console.log(navigator.mediaDevices.getUserMedia);
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      const videoTracks = stream.getVideoTracks();
+      this.stream = await navigator.mediaDevices.getUserMedia(constraints);
+      const videoTracks = this.stream.getVideoTracks();
       logger.info(
         `Obtained local video tracks from device: ${videoTracks[0].label}`
       );
-      this.videoElement.srcObject = stream;
+      this.videoElement.srcObject = this.stream;
     } catch (error) {
-      this.isActive = false;
-
       if (error.name === "OverconstrainedError") {
         logger.error(
           "Failed to start local video because of overcontrained",
@@ -62,10 +52,15 @@ class LocalMediaController {
       } else {
         logger.error("Failed to start local video", error);
       }
+      this.stop();
     }
   }
 
   stop() {
+    if (this.stream && this.stream.active) {
+      logger.info("Stopping local video stream");
+      this.stream.getTracks().forEach((track) => track.stop());
+    }
     this.cleanup();
   }
 
