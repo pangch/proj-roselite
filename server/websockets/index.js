@@ -2,7 +2,7 @@ import { WebSocketServer } from "ws";
 import { v4 as uuid } from "uuid";
 
 import { createLogger } from "../../common/logger.js";
-import ClientHandler from "./client-handler.js";
+import ClientController from "./client-controller.js";
 import { addHeartbeat, startHeartbeat, stopHeartbeat } from "./heartbeat.js";
 
 const logger = createLogger("WebSocket");
@@ -20,7 +20,7 @@ export default async function (server) {
 
   wss.on("connection", function connection(websocket, request) {
     const id = uuid();
-    const client = new ClientHandler(id, websocket, request);
+    const client = new ClientController(id, websocket, request);
     addHeartbeat(client);
   });
 

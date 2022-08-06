@@ -1,10 +1,10 @@
-import { getClients } from "./client-handler.js";
+import { getClients } from "./client-controller.js";
 
 let heartbeatInterval = null;
 
 export function addHeartbeat(client) {
   client.isAlive = true;
-  client.websocket.on("pong", () => (client.isAlive = true));
+  client.socket.on("pong", () => (client.isAlive = true));
 }
 
 export function startHeartbeat(client) {
@@ -12,11 +12,11 @@ export function startHeartbeat(client) {
     const clients = getClients();
     for (client of clients) {
       if (client.isAlive === false) {
-        return client.websocket.terminate();
+        return client.socket.terminate();
       }
 
       client.isAlive = false;
-      client.websocket.ping();
+      client.socket.ping();
     }
   }, 10000);
 }

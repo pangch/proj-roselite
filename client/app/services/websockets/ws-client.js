@@ -2,7 +2,7 @@ import { createLogger } from "../../../../common/logger.js";
 import { getSessionInfo } from "../../models/session.js";
 import WSMessagingHandler from "./handlers/ws-messaging-handler.js";
 import WSRtcHandler from "./handlers/ws-rtc-handler.js";
-import WSUsersHandler from "./handlers/ws-users-handler.js";
+import WSSessionHandler from "./handlers/ws-session-handler.js";
 
 const logger = createLogger("WSClient");
 
@@ -26,7 +26,7 @@ export default class WSClient {
     );
 
     this.handlers = [
-      new WSUsersHandler(this),
+      new WSSessionHandler(this),
       new WSMessagingHandler(this),
       new WSRtcHandler(this),
     ];

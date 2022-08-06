@@ -12,7 +12,7 @@ import {
   updateUserList,
 } from "../../../models/users.js";
 
-export default class WSUsersHandler {
+export default class WSSessionHandler {
   constructor(client) {
     this.client = client;
     this.messagesModel = getMessagesModel();
