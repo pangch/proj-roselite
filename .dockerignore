@@ -2,7 +2,7 @@
 .dockerignore
 .git
 .gitignore
-conf
+system
 dist
 docker-compose.yml
 node_modules
