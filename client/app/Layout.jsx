@@ -6,7 +6,7 @@ import Messages from "./components/Messages";
 import Input from "./components/Input";
 import Info from "./components/Info";
 import Console from "./components/Console";
-import Videos from "./components/Videos";
+import RemoteVideos from "./components/RemoteVideos";
 
 export default function Layout() {
   return (
@@ -17,7 +17,7 @@ export default function Layout() {
           <Users />
         </div>
         <div className="flex flex-col grow">
-          <Videos />
+          <RemoteVideos />
           <Messages />
           <Input />
         </div>

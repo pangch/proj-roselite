@@ -1,5 +1,5 @@
 import { createLogger } from "../../../common/logger.js";
-import { appendMessage } from "../models/messages.js";
+import { getMessagesModel } from "../models/messages-model.js";
 import { getSessionInfo, setSessionId } from "../models/session.js";
 
 import {
@@ -24,6 +24,7 @@ let client = null;
 class WSClient {
   constructor() {
     logger.info(`Connecting to WebSocket server: ${server}`);
+
     const socket = new WebSocket(server);
     this.socket = socket;
 
@@ -31,6 +32,8 @@ class WSClient {
     socket.onmessage = (event) => this.handleMessage(event);
     socket.onclose = (event) => this.handleClose(event);
     socket.onerror = (error) => this.handleError(error);
+
+    this.messagesModel = getMessagesModel();
   }
 
   handleOpen(event) {
@@ -103,7 +106,7 @@ class WSClient {
 
   onJoined(message) {
     addUser(message.user);
-    appendMessage({
+    this.messagesModel.appendMessage({
       type: "status",
       userId: message.user.id,
       content: `${message.user.username} joined.`,
@@ -114,7 +117,7 @@ class WSClient {
     const user = getUserFromId(message.id);
     removeUser(message.id);
 
-    appendMessage({
+    this.messagesModel.appendMessage({
       type: "status",
       userId: message.id,
       content: `${user.username} left.`,
@@ -130,7 +133,7 @@ class WSClient {
   }
 
   onReceiveTextMessage(message) {
-    appendMessage({
+    this.messagesModel.appendMessage({
       type: "text",
       userId: message.userId,
       content: message.content,

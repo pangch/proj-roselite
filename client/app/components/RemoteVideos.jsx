@@ -5,7 +5,7 @@ import { isEmpty } from "lodash";
 import { useVideosContext } from "../contexts/VideosContext";
 import { removeVideoElement, setVideoElement } from "../models/videos";
 
-function VideoItem({ userId }) {
+function RemoteVideoItem({ userId }) {
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ function VideoItem({ userId }) {
   return <video className="video" ref={videoRef} autoPlay playsInline />;
 }
 
-function VideoContainer({ video }) {
+function RemoteVideoContainer({ video }) {
   return (
     <div className="video-container">
       <VideoItem userId={video.userId} />
@@ -26,7 +26,7 @@ function VideoContainer({ video }) {
   );
 }
 
-export default function Videos() {
+export default function RemoteVideos() {
   const { videos } = useVideosContext();
   return (
     <section

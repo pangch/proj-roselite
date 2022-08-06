@@ -184,6 +184,7 @@ ul {
 .section-videos .video {
   width: 240px;
   height: 180px;
+  border: 2px solid #FEFFFF;
 }
 
 .section-console {

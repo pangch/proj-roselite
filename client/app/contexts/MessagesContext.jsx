@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useContext, useReducer, useEffect } from "react";
-import { subscribeMessages } from "../models/messages.js";
+import { getMessagesModel } from "../models/messages-model.js";
 
 const StateContext = React.createContext();
 const DispatchContext = React.createContext();
@@ -17,8 +17,10 @@ function reducer(state, action) {
 export function MessagesContextProvider(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const messagesModel = getMessagesModel();
+
   useEffect(() => {
-    return subscribeMessages(dispatch);
+    return messagesModel.subscribe(dispatch);
   }, []);
 
   return (
