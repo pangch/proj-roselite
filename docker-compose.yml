@@ -1,20 +1,16 @@
 version: "3.8"
+
 services:
-  server:
+  appserver:
     image: node:16.6-bullseye-slim
-    ports:
-      - "8080:3001"
-    working_dir: /app
     environment:
       - NODE_ENV=development
-    command: ["npm", "run", "start"]
-    restart: always
-    networks:
-      - intern
+    ports:
+      - "8080:3000"
+    working_dir: /app
+    command: npm run start
+    restart: unless-stopped
     volumes:
       - type: bind
         source: ./
         target: /app
-
-networks:
-  intern:

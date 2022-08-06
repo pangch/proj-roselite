@@ -5,7 +5,7 @@ import websockets from "./websockets/index.js";
 
 async function boot() {
   const app = express();
-  const port = process.env.PORT || 3001;
+  const port = process.env.PORT || 3000;
 
   app.use(morgan("combined"));
   app.use(express.static("dist/public"));

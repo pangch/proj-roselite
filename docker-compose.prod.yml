@@ -1,12 +1,41 @@
 version: "3.8"
+
 services:
-  server:
+  appserver:
     build: .
+    container_name: appserver
+    environment:
+      - NODE_ENV=production
     ports:
-      - "8080:3001"
+      - "8080:3000"
     working_dir: /app
-    command: ["npm", "run", "start"]
-    restart: always
+    command: npm run start
+    restart: unless-stopped
     networks:
       - intern
 
+  webserver:
+    image: nginx:mainline-alpine
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - web-root:/var/www/html
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - ./conf/nginx-conf:/etc/nginx/conf.d
+    depends_on:
+      - app
+    networks:
+      - intern
+
+volumes:
+  certbot-etc:
+  certbot-var:
+  web-root:
+
+networks:
+  intern:
+    driver: bridge
