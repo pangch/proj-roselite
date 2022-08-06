@@ -27,7 +27,7 @@ services:
       - certbot-var:/var/lib/letsencrypt
       - ./conf/nginx-conf:/etc/nginx/conf.d
     depends_on:
-      - app
+      - appserver
     networks:
       - intern
 
