@@ -13,9 +13,9 @@ class Logger {
     this.tag = tag;
   }
 
-  #log(message, level, error = null) {
+  #log(message, level, error = null, ...args) {
     const logMessage = `[${this.tag}] ${message}`;
-    console[level](logMessage);
+    console[level](logMessage, ...args);
 
     loggerObservable.emit({
       type: "new",
@@ -28,8 +28,7 @@ class Logger {
     });
 
     if (error != null) {
-      const errorMessage = `[${this.tag}][Error] ${error}`;
-      console[level](`[${this.tag}][Error] ${error}`);
+      console[level](error);
 
       loggerObservable.emit({
         type: "new",
@@ -37,26 +36,26 @@ class Logger {
           id: currentId++,
           level,
           time: new Date(),
-          message: errorMessage,
+          message: `[${this.tag}] ${error}`,
         },
       });
     }
   }
 
-  debug(message) {
-    this.#log(message, "debug");
+  debug(message, ...args) {
+    this.#log(message, "debug", null, ...args);
   }
 
-  info(message) {
-    this.#log(message, "info");
+  info(message, ...args) {
+    this.#log(message, "info", null, ...args);
   }
 
-  warn(message, error) {
-    this.#log(message, "warn", error);
+  warn(message, error, ...args) {
+    this.#log(message, "warn", error, ...args);
   }
 
-  error(message, error) {
-    this.#log(message, "error", error);
+  error(message, error, ...args) {
+    this.#log(message, "error", error, ...args);
   }
 }
 

@@ -41,9 +41,9 @@ export default class WSUsersHandler {
   }
 
   onIdentity(message) {
-    this.id = message.id;
-    setSessionId(this.id);
-    logger.info(`Received session ID: ${this.id}`);
+    const id = message.id;
+    setSessionId(id);
+    logger.info(`Received session ID: ${id}`);
   }
 
   onJoined(message) {
