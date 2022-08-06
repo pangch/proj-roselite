@@ -1,6 +1,8 @@
-import { createLogger } from "../../../common/logger.js";
-import { getMessagesModel } from "../models/messages-model.js";
-import { getSessionInfo, setSessionId } from "../models/session.js";
+import { createLogger } from "../../../../common/logger.js";
+import { getMessagesModel } from "../../models/messages-model.js";
+import { getSessionInfo, setSessionId } from "../../models/session.js";
+
+const logger = createLogger("WSClient");
 
 import {
   addUser,
@@ -8,37 +10,30 @@ import {
   removeUser,
   updateUser,
   updateUserList,
-} from "../models/users.js";
+} from "../../models/users.js";
+import WSService from "./ws-service.js";
 
-const logger = createLogger("WebSocket");
+const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+const server = `${protocol}//${window.location.host}`;
 
-const server = `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${
-  window.location.host
-}`;
-
-const MIN_RETRY_WAIT = 100;
-const MAX_RETRY_WAIT = 5 * 60 * 1000;
-
-let client = null;
-
-class WSClient {
+export default class WSClient {
   constructor() {
     logger.info(`Connecting to WebSocket server: ${server}`);
 
-    const socket = new WebSocket(server);
-    this.socket = socket;
+    this.socket = new WebSocket(server);
+    this.service = new WSService(this);
 
-    socket.onopen = (event) => this.handleOpen(event);
-    socket.onmessage = (event) => this.handleMessage(event);
-    socket.onclose = (event) => this.handleClose(event);
-    socket.onerror = (error) => this.handleError(error);
+    this.socket.addEventListener("open", (event) => this.handleOpen(event));
+    this.socket.addEventListener("close", (event) => this.handleClose(event));
+    this.socket.addEventListener("error", (event) => this.handleError(event));
+    this.socket.addEventListener("message", (event) =>
+      this.handleMessage(event)
+    );
 
     this.messagesModel = getMessagesModel();
   }
 
   handleOpen(event) {
-    retryWait = MIN_RETRY_WAIT;
-
     logger.info("Connection established");
     const sessionInfo = getSessionInfo();
     const { username } = sessionInfo;
@@ -87,8 +82,6 @@ class WSClient {
     } else {
       logger.info("Connection died");
     }
-    client = null;
-    reconnectWithRetry();
   }
 
   sendMessage(message) {
@@ -138,42 +131,5 @@ class WSClient {
       userId: message.userId,
       content: message.content,
     });
-  }
-}
-
-let retryWait = MIN_RETRY_WAIT;
-function reconnectWithRetry() {
-  if (client !== null) {
-    retryWait = MIN_RETRY_WAIT;
-    return;
-  }
-  setTimeout(() => {
-    client = new WSClient();
-    retryWait *= 2;
-    if (retryWait > MAX_RETRY_WAIT) {
-      retryWait = MAX_RETRY_WAIT;
-    }
-  }, retryWait);
-}
-
-function requireClient() {
-  if (client == null) {
-    logger.error("Cannot send WS message because no active connection.");
-    return;
-  }
-  return client;
-}
-
-export function notifyUsername(username) {
-  requireClient()?.sendMessage({ type: "identity", username });
-}
-
-export function sendTextMessage(content) {
-  requireClient()?.sendMessage({ type: "send-text-message", content });
-}
-
-export function initWebSocket() {
-  if (client == null) {
-    client = new WSClient();
   }
 }

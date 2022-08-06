@@ -1,6 +1,6 @@
 import { range, isEmpty } from "lodash";
 import Observable from "../../../common/observable.js";
-import { notifyUsername } from "../services/websocket.js";
+import { getWSService } from "../services/websockets/index.js";
 
 let sessionInfo = initSessionInfo();
 
@@ -47,7 +47,8 @@ export function setUsername(newUsername) {
   localStorage.setItem("username", newUsername);
   sessionObservable.emit({ type: "update" });
 
-  notifyUsername(newUsername);
+  const ws = getWSService();
+  ws?.notifyUsername(newUsername);
 }
 
 export function getSessionId() {

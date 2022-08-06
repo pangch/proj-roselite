@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 
-// import "webrtc-adapter";
+import "./app/services/websockets";
 
 import "./styles/utilities.css";
 import "./styles/main.css";

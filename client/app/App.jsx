@@ -6,7 +6,6 @@ import { SessionContextProvider } from "./contexts/SessionContext";
 import { UsersContextProvider } from "./contexts/UsersContext";
 import { VideosContextProvider } from "./contexts/VideosContext";
 import Layout from "./Layout";
-import ServicesInitializer from "./ServicesInitializer";
 
 export default function App() {
   return (
@@ -15,7 +14,6 @@ export default function App() {
         <MessagesContextProvider>
           <SessionContextProvider>
             <VideosContextProvider>
-              <ServicesInitializer />
               <Layout />
             </VideosContextProvider>
           </SessionContextProvider>

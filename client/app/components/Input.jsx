@@ -1,17 +1,29 @@
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
-import { sendTextMessage } from "../services/websocket";
+import { getWSService } from "../services/websockets";
 
 export default function Input() {
   const [text, setText] = useState("");
+  const [hasError, setHasError] = useState(false);
+
   const inputRef = useRef(null);
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      sendTextMessage(text.trim());
+      const ws = getWSService();
+      if (ws == null) {
+        setHasError(true);
+        return;
+      }
+      ws.sendTextMessage(text.trim());
       setText("");
     }
+  };
+
+  const handleChange = (event) => {
+    setHasError(false);
+    setText(event.target.value);
   };
 
   useEffect(() => {
@@ -26,7 +38,7 @@ export default function Input() {
       <textarea
         rows="3"
         value={text}
-        onChange={(event) => setText(event.target.value)}
+        onChange={handleChange}
         onKeyPress={handleKeyPress}
         ref={inputRef}
       />
