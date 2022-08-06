@@ -11,7 +11,10 @@ import {
 } from "../models/users.js";
 
 const logger = createLogger("WebSocket");
-const server = `ws://${window.location.host}`;
+
+const server = `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${
+  window.location.host
+}`;
 
 const MIN_RETRY_WAIT = 100;
 const MAX_RETRY_WAIT = 5 * 60 * 1000;

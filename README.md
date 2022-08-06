@@ -14,5 +14,10 @@ Run `docker-compose up` to launch the appserver container. Then attach to the ap
 
 Run `docker-compose -y docker-compose.prod.yml up` to build and run a prod version of the appserver with nginx and certbot. This would allow running the website with SSL, without which browsers would not enable most media capabilities.
 
-Some notes for SSL
-`sudo mkdir -r ./system/certs/dhparam && openssl dhparam -out ./system/certs/dhparam/dhparam-2048.pem 2048`
+#### Other notes
+
+Generate dhparam certs
+
+```
+sudo mkdir -p ./system/dhparam && openssl dhparam -out ./system/dhparam/dhparam-2048.pem 2048
+```
