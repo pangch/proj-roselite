@@ -1,16 +1,11 @@
 import { createLogger } from "../../../../common/logger.js";
-import { getMessagesModel } from "../../models/messages-model.js";
-import { getSessionInfo, setSessionId } from "../../models/session.js";
+import { getSessionInfo } from "../../models/session.js";
+import WSMessagingHandler from "./handlers/ws-messaging-handler.js";
+import WSRtcHandler from "./handlers/ws-rtc-handler.js";
+import WSUsersHandler from "./handlers/ws-users-handler.js";
 
 const logger = createLogger("WSClient");
 
-import {
-  addUser,
-  getUserFromId,
-  removeUser,
-  updateUser,
-  updateUserList,
-} from "../../models/users.js";
 import WSService from "./ws-service.js";
 
 const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
@@ -30,7 +25,11 @@ export default class WSClient {
       this.handleMessage(event)
     );
 
-    this.messagesModel = getMessagesModel();
+    this.handlers = [
+      new WSUsersHandler(this),
+      new WSMessagingHandler(this),
+      new WSRtcHandler(this),
+    ];
   }
 
   handleOpen(event) {
@@ -49,22 +48,9 @@ export default class WSClient {
 
     try {
       const parsedMessage = JSON.parse(message);
-      switch (parsedMessage.type) {
-        case "identity":
-          return this.onIdentity(parsedMessage);
-        case "joined":
-          return this.onJoined(parsedMessage);
-        case "left":
-          return this.onLeft(parsedMessage);
-        case "user-list":
-          return this.onUserList(parsedMessage);
-        case "update-user":
-          return this.onUpdateUser(parsedMessage);
-        case "receive-text-message":
-          return this.onReceiveTextMessage(parsedMessage);
-        default:
-          logger.warn(`Unhandled message: ${message}`);
-      }
+      this.handlers.find(
+        (handler) => handler.handleMessage(parsedMessage) !== false
+      );
     } catch (error) {
       logger.error(`Failed to handle message: ${message}`, error);
     }
@@ -89,47 +75,5 @@ export default class WSClient {
       message = JSON.stringify(message);
     }
     this.socket.send(message);
-  }
-
-  onIdentity(message) {
-    this.id = message.id;
-    setSessionId(this.id);
-    logger.info(`Received session ID: ${this.id}`);
-  }
-
-  onJoined(message) {
-    addUser(message.user);
-    this.messagesModel.appendMessage({
-      type: "status",
-      userId: message.user.id,
-      content: `${message.user.username} joined.`,
-    });
-  }
-
-  onLeft(message) {
-    const user = getUserFromId(message.id);
-    removeUser(message.id);
-
-    this.messagesModel.appendMessage({
-      type: "status",
-      userId: message.id,
-      content: `${user.username} left.`,
-    });
-  }
-
-  onUserList(message) {
-    updateUserList(message.users);
-  }
-
-  onUpdateUser(message) {
-    updateUser(message.user);
-  }
-
-  onReceiveTextMessage(message) {
-    this.messagesModel.appendMessage({
-      type: "text",
-      userId: message.userId,
-      content: message.content,
-    });
   }
 }
