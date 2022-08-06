@@ -1,21 +1,14 @@
 import { createLogger } from "../../../../../common/logger.js";
 import { getMessagesModel } from "../../../models/messages-model.js";
-import { setSessionId } from "../../../models/session.js";
+import { getSessionModel } from "../../../models/session-model.js";
 
 const logger = createLogger("WSUsersHandler");
-
-import {
-  addUser,
-  getUserFromId,
-  removeUser,
-  updateUser,
-  updateUserList,
-} from "../../../models/users.js";
 
 export default class WSSessionHandler {
   constructor(client) {
     this.client = client;
     this.messagesModel = getMessagesModel();
+    this.sessionModel = getSessionModel();
   }
 
   handleMessage(message) {
@@ -42,12 +35,12 @@ export default class WSSessionHandler {
 
   onIdentity(message) {
     const id = message.id;
-    setSessionId(id);
+    this.sessionModel.setSessionId(id);
     logger.info(`Received session ID: ${id}`);
   }
 
   onJoined(message) {
-    addUser(message.user);
+    this.sessionModel.addUser(message.user);
     this.messagesModel.appendMessage({
       type: "status",
       userId: message.user.id,
@@ -56,8 +49,8 @@ export default class WSSessionHandler {
   }
 
   onLeft(message) {
-    const user = getUserFromId(message.id);
-    removeUser(message.id);
+    const user = this.sessionModel.getUserFromId(message.id);
+    this.sessionModel.removeUser(message.id);
 
     this.messagesModel.appendMessage({
       type: "status",
@@ -67,10 +60,10 @@ export default class WSSessionHandler {
   }
 
   onUserList(message) {
-    updateUserList(message.users);
+    this.sessionModel.updateUserList(message.users);
   }
 
   onUpdateUser(message) {
-    updateUser(message.user);
+    this.sessionModel.updateUser(message.user);
   }
 }

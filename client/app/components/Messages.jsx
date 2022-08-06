@@ -3,8 +3,7 @@ import { useEffect, useRef } from "react";
 import classNames from "classnames";
 import { isEmpty } from "lodash";
 import { useMessagesContext } from "../contexts/MessagesContext";
-import { getSessionId } from "../models/session";
-import { useUserNameFromId } from "../contexts/UsersContext";
+import { useSessionId, useUserNameFromId } from "../contexts/SessionContext";
 
 function EmptyPlaceholder() {
   return <div>No messages</div>;
@@ -37,7 +36,7 @@ function TextMessageItem({ message, isSelf }) {
 }
 
 function MessageItem({ message }) {
-  const sessionId = getSessionId();
+  const sessionId = useSessionId();
 
   switch (message.messageType) {
     case "status":

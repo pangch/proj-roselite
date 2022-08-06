@@ -1,17 +1,16 @@
 import * as React from "react";
 import { useState } from "react";
 import { isEmpty } from "lodash";
-import { useUsersContext } from "../contexts/UsersContext";
-import { useSessionContext } from "../contexts/SessionContext";
-import { getSessionInfo, setUsername } from "../models/session";
+import { useSessionContext, useSessionId } from "../contexts/SessionContext";
 import { startLocalVideo, stopLocalVideo } from "../services/rtc/local-media";
 import { useVideoInfoForUserId } from "../contexts/VideosContext";
+import { getSessionModel } from "../models/session-model";
 
 function UserSelfEditor({ user, onDone }) {
   const [name, setName] = useState(user.username);
   const handleDone = () => {
     if (!isEmpty(name)) {
-      setUsername(name.slice(0, 20));
+      getSessionModel().setUsername(name.slice(0, 20));
     }
     onDone();
   };
@@ -61,7 +60,8 @@ function VideoButton({ user }) {
 
 function UserSelf({ user }) {
   const [isEdit, setIsEdit] = useState(false);
-  const { username } = getSessionInfo();
+  const { sessionInfo } = useSessionContext();
+  const { username } = sessionInfo;
   if (isEdit) {
     return <UserSelfEditor user={user} onDone={() => setIsEdit(false)} />;
   }
@@ -88,7 +88,7 @@ function UserOther({ user }) {
 }
 
 function UserItem({ user }) {
-  const { id } = useSessionContext();
+  const id = useSessionId();
   const isSelf = id != null && id === user.id;
   if (isSelf) {
     return <UserSelf user={user} />;
@@ -106,8 +106,7 @@ function UserListPlaceholder({ username }) {
 }
 
 export default function Users() {
-  const { users } = useUsersContext();
-  const { username } = useSessionContext();
+  const { users, username } = useSessionContext();
   return (
     <section className="section-users grow">
       <ul>

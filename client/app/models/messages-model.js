@@ -16,8 +16,8 @@ class MessagesModel extends Observable {
   }
 }
 
-const messagesModel = new MessagesModel();
+const model = new MessagesModel();
 
 export function getMessagesModel() {
-  return messagesModel;
+  return model;
 }
