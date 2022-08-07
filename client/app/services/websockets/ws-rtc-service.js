@@ -1,3 +1,5 @@
+import { merge } from "lodash";
+
 export default class WSRtcService {
   constructor(client) {
     this.client = client;
@@ -10,12 +12,18 @@ export default class WSRtcService {
   }
 
   signalCandidate(candidate) {
-    this.client.sendMessage({
+    const message = {
       type: "rtc-candidate",
-      candidate: candidate.candidate,
-      sdpMid: candidate.sdpMid,
-      sdpMLineIndex: e.candidate.sdpMLineIndex,
-    });
+      candidate: null,
+    };
+    if (candidate != null) {
+      merge(message, {
+        candidate: candidate.candidate,
+        sdpMid: candidate.sdpMid,
+        sdpMLineIndex: candidate.sdpMLineIndex,
+      });
+    }
+    this.client.sendMessage(message);
   }
 
   signalOffer(userId, offer) {
