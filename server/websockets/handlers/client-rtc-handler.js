@@ -14,11 +14,8 @@ export default class ClientRtcHandler {
         case "rtc-relay":
           return this.onRtcRelay(message);
         case "rtc-ready":
-        case "rtc-candidate":
-        case "rtc-offer":
-        case "rtc-answer":
         case "rtc-disconnect":
-          return this.onForwardRtcMessage(message);
+          return this.onRtcStatus(message);
         default:
           return false;
       }
@@ -50,18 +47,18 @@ export default class ClientRtcHandler {
     );
   }
 
-  onForwardRtcMessage(message) {
+  onRtcStatus(message) {
     // Append userId and forward the RTC messages to client
-    const { toUserId, ...others } = message;
+    const { recipientId, ...others } = message;
     message = {
       ...others,
-      userId: this.client.id,
+      senderId: this.client.id,
     };
-    if (toUserId != null) {
-      logger.info(`Forwarding RTC message to user ${toUserId}.`, message);
-      sendMessageToUser(message, toUserId);
+    if (recipientId != null) {
+      logger.info(`Forwarding RTC status to user ${recipientId}.`, message);
+      sendMessageToUser(message, recipientId);
     } else {
-      logger.info("Forwarding RTC message to everyone.", message);
+      logger.info("Forwarding RTC status to everyone.", message);
       sendBroadcast(message, this.client.id);
     }
   }

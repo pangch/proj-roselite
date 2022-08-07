@@ -1,7 +1,6 @@
 import { createLogger } from "../../../common/logger.js";
 import Observable from "../../../common/observable.js";
 import LocalMediaController from "../services/rtc/local-media-controller.js";
-import { getPeerConnectionController } from "../services/rtc/peer-connection-controller.js";
 
 const logger = createLogger("LocalMediaModel");
 

@@ -54,12 +54,12 @@ export default class RemotePeerController {
 
   handleTrack({ track, streams }) {
     logger.info("Received track");
-    getRemoteMediaModel().activateUser(this.userId);
 
     track.onunmute = () => {
       if (this.remoteVideo.srcObject != null) {
         return;
       }
+      getRemoteMediaModel().activateUser(this.userId);
       this.remoteVideo.srcObject = streams[0];
     };
   }
