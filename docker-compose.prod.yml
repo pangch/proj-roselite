@@ -33,7 +33,7 @@ services:
       - intern
 
   certbot:
-    image: certbot/certbot
+    image: certbot/certbot:latest
     container_name: certbot
     volumes:
       - certbot-etc:/etc/letsencrypt
@@ -42,6 +42,16 @@ services:
     depends_on:
       - webserver
     command: certonly --webroot --webroot-path=/var/www/html --email echevil@gmail.com --agree-tos --no-eff-email --force-renewal -d chenpang.dev  -d www.chenpang.dev -d webrtc.chenpang.dev
+
+  coturn:
+    image: coturn/coturn:4.5
+    restart: unless-stopped
+    ports:
+      - "3478:3478"
+      - "3478:3478/udp"
+      - "5349:5349"
+      - "5349:5349/udp"
+      - "49152-65535:49152-65535/udp"
 
 volumes:
   certbot-etc:
