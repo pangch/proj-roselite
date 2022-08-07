@@ -6,10 +6,10 @@ const StateContext = React.createContext();
 const DispatchContext = React.createContext();
 
 function reducer(state, action) {
-  // switch (action?.type) {
-  //   case "update-active":
-  //     return { ...state, isActive: action.isActive };
-  // }
+  switch (action?.type) {
+    case "update-active-users":
+      return { ...state, activeUsers: action.activeUsers };
+  }
   return state;
 }
 
@@ -38,5 +38,5 @@ export function useRemoteMediaContext() {
 
 export function useIsUserMediaActive(userId) {
   const { activeUsers } = useRemoteMediaContext();
-  return activeUsers.find((user) => user.id === userId) != null;
+  return activeUsers.includes(userId);
 }

@@ -24,10 +24,10 @@ function RemoteVideoItem({ userId }) {
 }
 
 function RemoteVideoContainer({ user }) {
-  const isActive = useIsUserMediaActive();
+  const isActive = useIsUserMediaActive(user.id);
   return (
     <div className={classNames("video-container", !isActive && "hidden")}>
-      <RemoteVideoItem userId={user.userId} />
+      <RemoteVideoItem userId={user.id} />
     </div>
   );
 }

@@ -15,6 +15,24 @@ class RemoteMediaModel extends Observable {
   clearVideoElement(userId) {
     this.videoElements.delete(userId);
   }
+
+  activateUser(userId) {
+    if (this.activeUsers.includes(userId)) {
+      return;
+    }
+
+    this.activeUsers = [...this.activeUsers, userId];
+    this.emit({ type: "update-active-users", activeUsers: this.activeUsers });
+  }
+
+  deactivateUser(userId) {
+    if (!this.activeUsers.includes(userId)) {
+      return;
+    }
+
+    this.activeUsers = this.activeUsers.filter((id) => id !== userId);
+    this.emit({ type: "update-active-users", activeUsers: this.activeUsers });
+  }
 }
 
 const model = new RemoteMediaModel();

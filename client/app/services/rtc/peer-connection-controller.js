@@ -1,4 +1,5 @@
 import { createLogger } from "../../../../common/logger.js";
+import { getRemoteMediaModel } from "../../models/remote-media-model.js";
 import { getWSRtcService } from "../websockets/index.js";
 
 let logger = createLogger("PeerConnectionController");
@@ -67,7 +68,24 @@ class PeerConnectionController {
   }
 
   handleTrack(event) {
-    logger.info("Recieved track");
+    logger.info("Recieved remote track");
+    if (this.peerUserId == null) {
+      logger.error("Cannot handle remote track as peer user id is null");
+      return;
+    }
+
+    const videoElement = getRemoteMediaModel().videoElements.get(
+      this.peerUserId
+    );
+    if (videoElement == null) {
+      logger.error(
+        `Cannot handle remote track because there is no video element for ${this.peerUserId}`
+      );
+      return;
+    }
+
+    logger.info("Setting remote track to video element", event.streams);
+    videoElement.srcObject = event.streams[0];
   }
 
   handleIceCandidate(event) {
@@ -111,6 +129,9 @@ class PeerConnectionController {
 
     const pc = this.peerConnection;
     logger.info(`Accepted offer.`);
+
+    getRemoteMediaModel().activateUser(userId);
+
     await pc.setRemoteDescription({ type: "offer", sdp });
 
     const answer = await pc.createAnswer();
@@ -137,6 +158,8 @@ class PeerConnectionController {
 
     const pc = this.peerConnection;
     logger.info(`Accepted answer.`);
+    getRemoteMediaModel().activateUser(userId);
+
     await pc.setRemoteDescription({ type: "answer", sdp });
   }
 }
