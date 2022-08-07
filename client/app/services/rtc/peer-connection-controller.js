@@ -85,6 +85,10 @@ class PeerConnectionController {
     }
 
     logger.info("Setting remote track to video element", event.streams);
+    if (videoElement.srcObject != null) {
+      logger.info("already set");
+      return;
+    }
     videoElement.srcObject = event.streams[0];
   }
 
@@ -127,12 +131,11 @@ class PeerConnectionController {
       this.#initializePeerConnection();
     }
 
-    const pc = this.peerConnection;
-    logger.info(`Accepted offer.`);
-
     getRemoteMediaModel().activateUser(userId);
+    const pc = this.peerConnection;
 
     await pc.setRemoteDescription({ type: "offer", sdp });
+    logger.info(`Accepted offer.`);
 
     const answer = await pc.createAnswer();
     logger.info(`Created answer \n${answer.sdp}`);
@@ -157,10 +160,38 @@ class PeerConnectionController {
     }
 
     const pc = this.peerConnection;
-    logger.info(`Accepted answer.`);
     getRemoteMediaModel().activateUser(userId);
 
     await pc.setRemoteDescription({ type: "answer", sdp });
+    logger.info(`Accepted answer.`);
+  }
+
+  async maybeAddIceCandidate(message) {
+    console.log("Adding", message);
+    const { userId, ...otherData } = message;
+    if (this.peerUserId == null) {
+      logger.info("Ignoring RTC ICE candidate because not in handshaking.");
+    }
+    if (this.peerUserId !== userId) {
+      logger.info(
+        "Ignoring RTC ICE candidate because it is not for current connection"
+      );
+      return;
+    }
+    if (this.peerConnection == null) {
+      logger.error("No peer connection when adding ice candidate");
+      return;
+    }
+    const pc = this.peerConnection;
+
+    const candidate = { ...otherData, type: "candidate" };
+    logger.info("Adding ICE candidate");
+
+    if (candidate.candidate == null) {
+      await pc.addIceCandidate(null);
+    } else {
+      await pc.addIceCandidate(candidate);
+    }
   }
 }
 

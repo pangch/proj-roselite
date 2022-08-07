@@ -20,6 +20,7 @@ class LocalMediaModel extends Observable {
       logger.error("Cannot set videoElement because it is not empty.");
       return;
     }
+
     this.videoElement = videoElement;
   }
 

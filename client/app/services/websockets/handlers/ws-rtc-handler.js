@@ -23,7 +23,7 @@ export default class WSRtcHandler {
         case "rtc-candidate":
           return this.onCandidate(message);
         case "rtc-disconnect":
-
+          return this.onDisconnect(message);
         default:
           return false;
       }
@@ -53,6 +53,7 @@ export default class WSRtcHandler {
 
   onCandidate(message) {
     logger.info(`Received RTC candidate from ${message.userId}`);
+    this.peerConnectionController.maybeAddIceCandidate(message);
   }
 
   onDisconnect(message) {
