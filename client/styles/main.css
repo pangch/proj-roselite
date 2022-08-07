@@ -177,19 +177,26 @@ ul {
   margin: 0 1rem 1rem 1rem;
 }
 
-.video {
+.section-local-media .video {
   width: 240px;
   height: 180px;
   border: 2px solid #FEFFFF;
 }
 
-.section-remote-videos {
+.section-remote-media {
   margin-bottom: 1rem;
 }
 
-.section-remote-videos .video-container {
+.section-remote-media .video-container {
   margin-right: 1rem;
 }
+
+.section-remote-media .video {
+  width: 320px;
+  height: 240px;
+  border: 2px solid #FEFFFF;
+}
+
 
 .section-console {
   font-family: 'Roboto Mono', monospace;

@@ -41,7 +41,7 @@ export default function RemoteMedia() {
   return (
     <section
       className={classNames(
-        "section-remote-videos",
+        "section-remote-media",
         "flex",
         "flex-wrap",
         isEmpty(activeUsers) && "hidden"

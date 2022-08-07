@@ -65,11 +65,16 @@ export default class RemotePeerController {
   }
 
   handleTrack({ track, streams }) {
-    logger.info("Received track", track, streams);
+    logger.info("Received track");
 
-    track.onunmute = () => {
-      this.remoteVideo.srcObject = streams[0];
-    };
+    if (
+      this.remoteVideo.srcObject != null &&
+      this.remoteVideo.srcObject.id === streams[0].id
+    ) {
+      return;
+    }
+
+    this.remoteVideo.srcObject = streams[0];
   }
 
   handleIceCandidate({ candidate }) {
