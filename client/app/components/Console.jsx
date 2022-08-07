@@ -7,9 +7,9 @@ import { useConsoleContext } from "../contexts/ConsoleContext";
 function ConsoleItem({ item }) {
   return (
     <div className={classNames("console-item", "flex", item.level)}>
-      <pre className="time shrink-0 margin-0">{item?.time?.toISOString()}</pre>
-      <pre className="margin-0">{`[${item?.level}]`}</pre>
-      <pre className="grow margin-0">{item?.message}</pre>
+      <pre className="time shrink-0 m-0">{item?.time?.toISOString()}</pre>
+      <pre className="m-0">{`[${item?.level}]`}</pre>
+      <pre className="grow m-0">{item?.message}</pre>
     </div>
   );
 }
@@ -27,7 +27,7 @@ export default function Console() {
 
   return (
     <section
-      className="section-console grow-0 overflow-y-scroll"
+      className="section-console grow-0 overflow-y-scroll hidden"
       ref={scrollAreaRef}
     >
       {consoleMessages?.map((item) => (

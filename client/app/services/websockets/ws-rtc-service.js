@@ -5,23 +5,11 @@ export default class WSRtcService {
     this.client = client;
   }
 
-  sendCandidate(userId, candidate) {
+  sendData(userId, data) {
     this.client.sendMessage({
       type: "rtc-relay",
-      userId: userId,
-      data: {
-        candidate,
-      },
-    });
-  }
-
-  sendDescription(userId, description) {
-    this.client.sendMessage({
-      type: "rtc-relay",
-      recipientId: userId,
-      data: {
-        description,
-      },
+      userId,
+      data,
     });
   }
 

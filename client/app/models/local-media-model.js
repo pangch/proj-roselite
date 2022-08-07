@@ -67,7 +67,10 @@ class LocalMediaModel extends Observable {
     const success = await this.localController.setup();
     if (!success) {
       this.deactivate();
+      return;
     }
+
+    this.emit({ type: "stream-ready", stream: this.localController.stream });
   }
 
   #cleanupIfNeeded() {
