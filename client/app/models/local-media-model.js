@@ -8,8 +8,7 @@ const logger = createLogger("LocalMediaModel");
 class LocalMediaModel extends Observable {
   isActive = false;
   videoElement = null;
-  localMediaController = null;
-  peerConnectionController = getPeerConnectionController();
+  localController = null;
 
   setVideoElement(videoElement) {
     if (videoElement == null) {
@@ -53,7 +52,7 @@ class LocalMediaModel extends Observable {
   }
 
   async #setup() {
-    if (this.localMediaController != null) {
+    if (this.localController != null) {
       return;
     }
     if (!this.isActive) {
@@ -64,27 +63,23 @@ class LocalMediaModel extends Observable {
       return;
     }
     logger.info("Starting local media...");
-    this.localMediaController = new LocalMediaController(this.videoElement);
-    const success = await this.localMediaController.start();
+    this.localController = new LocalMediaController(this.videoElement);
+    const success = await this.localController.setup();
     if (!success) {
       this.deactivate();
     }
-    this.peerConnectionController.setLocalMediaController(
-      this.localMediaController
-    );
   }
 
   #cleanupIfNeeded() {
     if (this.isActive) {
       return;
     }
-    if (this.localMediaController == null) {
+    if (this.localController == null) {
       return;
     }
     logger.info("Stopping local media...");
-    this.peerConnectionController.clearLocalMediaController();
-    this.localMediaController.cleanup();
-    this.localMediaController = null;
+    this.localController.shutdown();
+    this.localController = null;
   }
 }
 

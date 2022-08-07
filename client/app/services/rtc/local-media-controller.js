@@ -12,7 +12,7 @@ export default class LocalMediaController {
     this.videoElement = videoElement;
   }
 
-  async start() {
+  async setup() {
     try {
       this.stream = await navigator.mediaDevices.getUserMedia(constraints);
       const videoTracks = this.stream.getVideoTracks();
@@ -39,14 +39,14 @@ export default class LocalMediaController {
     }
   }
 
-  stop() {
+  stopMedia() {
     if (this.stream != null && this.stream.active) {
       logger.info("Stopping local video stream");
       this.stream.getTracks().forEach((track) => track.stop());
     }
   }
 
-  cleanup() {
-    this.stop();
+  shutdown() {
+    this.stopMedia();
   }
 }
