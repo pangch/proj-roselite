@@ -33,17 +33,25 @@ class RemoteMediaModel extends Observable {
   }
 
   handleLocalMediaEvents(action) {
-    if (action?.type === "stream-ready") {
-      const stream = action.stream;
-      for (const remoteController of this.remoteControllers.values()) {
-        remoteController.addLocalStream(stream);
+    "stream-closed";
+    switch (action?.type) {
+      case "stream-ready": {
+        const stream = action.stream;
+        for (const remoteController of this.remoteControllers.values()) {
+          remoteController.addLocalStream(stream);
+        }
+        break;
       }
+      case "stream-closed":
+        for (const remoteController of this.remoteControllers.values()) {
+          remoteController.removeLocalStreamIfNeeded();
+        }
+        break;
     }
   }
 
   setVideoElement(userId, videoElement) {
     this.videoElements.set(userId, videoElement);
-
     this.remoteControllers.set(
       userId,
       new RemotePeerController(userId, videoElement)

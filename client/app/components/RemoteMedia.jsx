@@ -20,7 +20,9 @@ function RemoteVideoItem({ userId }) {
     };
   }, [userId]);
 
-  return <video className="video" ref={videoRef} autoPlay playsInline />;
+  return (
+    <video className="video" ref={videoRef} autoPlay playsInline controls />
+  );
 }
 
 function RemoteVideoContainer({ user }) {

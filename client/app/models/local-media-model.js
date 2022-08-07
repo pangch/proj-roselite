@@ -84,6 +84,7 @@ class LocalMediaModel extends Observable {
     logger.info("Stopping local media...");
 
     getWSRtcService()?.notifyDisconnect();
+    this.emit({ type: "stream-closed" });
 
     this.localController.shutdown();
     this.localController = null;

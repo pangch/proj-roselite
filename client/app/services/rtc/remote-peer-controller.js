@@ -9,6 +9,8 @@ export default class RemotePeerController {
   pc = null;
   flags = {}; // Flags used for negoatiation
 
+  senders = [];
+
   constructor(userId, videoElement) {
     this.userId = userId;
     this.remoteVideo = videoElement;
@@ -19,14 +21,25 @@ export default class RemotePeerController {
 
     logger.info("Adding local stream");
     for (const track of stream.getTracks()) {
-      this.pc.addTrack(track, stream);
+      this.senders.push(this.pc.addTrack(track, stream));
     }
+  }
+
+  removeLocalStreamIfNeeded() {
+    if (this.pc == null) {
+      return;
+    }
+    this.senders.forEach((sender) => {
+      this.pc.removeTrack(sender);
+    });
+    this.senders = [];
   }
 
   shutdown() {
     if (this.pc != null) {
       this.pc.close();
       this.pc = null;
+      this.senders = [];
       this.flags = {};
     }
   }
@@ -52,12 +65,9 @@ export default class RemotePeerController {
   }
 
   handleTrack({ track, streams }) {
-    logger.info("Received track");
+    logger.info("Received track", track, streams);
 
     track.onunmute = () => {
-      if (this.remoteVideo.srcObject != null) {
-        return;
-      }
       this.remoteVideo.srcObject = streams[0];
     };
   }
