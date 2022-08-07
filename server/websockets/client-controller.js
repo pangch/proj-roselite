@@ -12,12 +12,15 @@ export function getClients() {
   return clients.values();
 }
 
-export function sendBroadcast(message) {
+export function sendBroadcast(message, excludeId = null) {
   if (typeof message !== "string") {
     message = JSON.stringify(message);
   }
   logger.debug(`Broadcasting message: ${message}`);
   for (let client of clients.values()) {
+    if (excludeId != null && client.id == excludeId) {
+      return;
+    }
     client.sendMessage(message);
   }
 }

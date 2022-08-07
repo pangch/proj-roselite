@@ -42,3 +42,11 @@ export function getWSService() {
   }
   return wsClient.service;
 }
+
+export function getWSRtcService() {
+  if (wsClient == null) {
+    logger.error("Cannot send RTC signal because no active connection.");
+    return;
+  }
+  return wsClient.rtcService;
+}

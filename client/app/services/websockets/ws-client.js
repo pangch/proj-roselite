@@ -1,12 +1,12 @@
 import { createLogger } from "../../../../common/logger.js";
-import { getSessionInfo } from "../../models/session.js";
+import { getSessionModel } from "../../models/session-model.js";
 import WSMessagingHandler from "./handlers/ws-messaging-handler.js";
 import WSRtcHandler from "./handlers/ws-rtc-handler.js";
 import WSSessionHandler from "./handlers/ws-session-handler.js";
+import WSService from "./ws-service.js";
+import WSRtcService from "./ws-rtc-service.js";
 
 const logger = createLogger("WSClient");
-
-import WSService from "./ws-service.js";
 
 const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
 const server = `${protocol}//${window.location.host}`;
@@ -17,6 +17,7 @@ export default class WSClient {
 
     this.socket = new WebSocket(server);
     this.service = new WSService(this);
+    this.rtcService = new WSRtcService(this);
 
     this.socket.addEventListener("open", (event) => this.handleOpen(event));
     this.socket.addEventListener("close", (event) => this.handleClose(event));
@@ -34,7 +35,8 @@ export default class WSClient {
 
   handleOpen(event) {
     logger.info("Connection established");
-    const sessionInfo = getSessionInfo();
+
+    const { sessionInfo } = getSessionModel();
     const { username } = sessionInfo;
     this.sendMessage({
       type: "join",

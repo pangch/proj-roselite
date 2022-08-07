@@ -6,21 +6,14 @@ const logger = createLogger("RemoteMediaModel");
 
 class RemoteMediaModel extends Observable {
   activeUsers = [];
+  videoElements = new Map();
 
   setVideoElement(userId, videoElement) {
-    console.log("Set");
+    this.videoElements.set(userId, videoElement);
   }
 
   clearVideoElement(userId) {
-    console.log("Clear");
-  }
-
-  activate() {
-    console.log("activate");
-  }
-
-  deactivate() {
-    console.log("deactivate");
+    this.videoElements.delete(userId);
   }
 }
 

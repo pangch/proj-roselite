@@ -1,6 +1,7 @@
 import { createLogger } from "../../../common/logger.js";
 import Observable from "../../../common/observable.js";
 import LocalMediaController from "../services/rtc/local-media-controller.js";
+import { getPeerConnectionController } from "../services/rtc/peer-connection-controller.js";
 
 const logger = createLogger("LocalMediaModel");
 
@@ -8,17 +9,18 @@ class LocalMediaModel extends Observable {
   isActive = false;
   videoElement = null;
   localMediaController = null;
+  peerConnectionController = getPeerConnectionController();
 
   setVideoElement(videoElement) {
     if (videoElement == null) {
       logger.error("Cannot set videoElement because passed in value is null");
+      return;
     }
     if (this.videoElement != null) {
       logger.error("Cannot set videoElement because it is not empty.");
       return;
     }
     this.videoElement = videoElement;
-    this.#setupIfReady();
   }
 
   clearVideoElement() {
@@ -37,7 +39,7 @@ class LocalMediaModel extends Observable {
     }
     this.isActive = true;
     this.emit({ type: "update-active", isActive: this.isActive });
-    this.#setupIfReady();
+    this.#setup();
   }
 
   deactivate() {
@@ -49,11 +51,15 @@ class LocalMediaModel extends Observable {
     this.#cleanupIfNeeded();
   }
 
-  async #setupIfReady() {
+  async #setup() {
     if (this.localMediaController != null) {
       return;
     }
-    if (!this.isActive || this.videoElement == null) {
+    if (!this.isActive) {
+      return;
+    }
+    if (this.videoElement == null) {
+      logger.error("Cannot start local media because video element is empty");
       return;
     }
     logger.info("Starting local media...");
@@ -62,6 +68,9 @@ class LocalMediaModel extends Observable {
     if (!success) {
       this.deactivate();
     }
+    this.peerConnectionController.setLocalMediaController(
+      this.localMediaController
+    );
   }
 
   #cleanupIfNeeded() {
@@ -72,6 +81,7 @@ class LocalMediaModel extends Observable {
       return;
     }
     logger.info("Stopping local media...");
+    this.peerConnectionController.clearLocalMediaController();
     this.localMediaController.cleanup();
     this.localMediaController = null;
   }
