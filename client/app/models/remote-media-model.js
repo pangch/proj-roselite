@@ -16,6 +16,20 @@ class RemoteMediaModel extends Observable {
 
     const localMediaModel = getLocalMediaModel();
     localMediaModel.subscribe((action) => this.handleLocalMediaEvents(action));
+
+    const sessionModel = getSessionModel();
+    sessionModel.subscribe((action) => this.handleSessionModelEvents(action));
+  }
+
+  handleSessionModelEvents(action) {
+    if (action?.type === "update-users") {
+      const toDeactivate = this.activeUsers.filter(
+        (user) => action.users.find((u) => u.id === user.id) == null
+      );
+      toDeactivate.forEach((userId) => {
+        this.deactivateUser(userId);
+      });
+    }
   }
 
   handleLocalMediaEvents(action) {

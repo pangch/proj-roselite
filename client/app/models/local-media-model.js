@@ -1,6 +1,7 @@
 import { createLogger } from "../../../common/logger.js";
 import Observable from "../../../common/observable.js";
 import LocalMediaController from "../services/rtc/local-media-controller.js";
+import { getWSRtcService } from "../services/websockets/index.js";
 
 const logger = createLogger("LocalMediaModel");
 
@@ -70,6 +71,7 @@ class LocalMediaModel extends Observable {
     }
 
     this.emit({ type: "stream-ready", stream: this.localController.stream });
+    getWSRtcService()?.notifyReady();
   }
 
   #cleanupIfNeeded() {
@@ -80,6 +82,9 @@ class LocalMediaModel extends Observable {
       return;
     }
     logger.info("Stopping local media...");
+
+    getWSRtcService()?.notifyDisconnect();
+
     this.localController.shutdown();
     this.localController = null;
   }

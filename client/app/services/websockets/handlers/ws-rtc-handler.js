@@ -53,10 +53,16 @@ export default class WSRtcHandler {
   }
 
   onReady(message) {
-    logger.info(`Received RTC ready from ${message.userId}`);
+    const { senderId } = message;
+    logger.info(`Received RTC ready from ${senderId}`);
+
+    this.remoteMediaModel.activateUser(senderId);
   }
 
   onDisconnect(message) {
-    logger.info(`Received RTC disconnect from ${message.userId}`);
+    const { senderId } = message;
+    logger.info(`Received RTC disconnect from ${senderId}`);
+
+    this.remoteMediaModel.deactivateUser(senderId);
   }
 }

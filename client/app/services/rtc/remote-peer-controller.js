@@ -29,7 +29,6 @@ export default class RemotePeerController {
       this.pc = null;
       this.flags = {};
     }
-    getRemoteMediaModel().deactivateUser(this.userId);
   }
 
   #setupIfNeeded() {
@@ -59,7 +58,6 @@ export default class RemotePeerController {
       if (this.remoteVideo.srcObject != null) {
         return;
       }
-      getRemoteMediaModel().activateUser(this.userId);
       this.remoteVideo.srcObject = streams[0];
     };
   }
