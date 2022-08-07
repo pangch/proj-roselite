@@ -3,8 +3,8 @@ import * as React from "react";
 import { ConsoleContextProvider } from "./contexts/ConsoleContext";
 import { LocalMediaContextProvider } from "./contexts/LocalMediaContext";
 import { MessagesContextProvider } from "./contexts/MessagesContext";
+import { RemoteMediaContextProvider } from "./contexts/RemoteMediaContext";
 import { SessionContextProvider } from "./contexts/SessionContext";
-import { VideosContextProvider } from "./contexts/VideosContext";
 import Layout from "./Layout";
 
 export default function App() {
@@ -13,9 +13,9 @@ export default function App() {
       <SessionContextProvider>
         <MessagesContextProvider>
           <LocalMediaContextProvider>
-            <VideosContextProvider>
+            <RemoteMediaContextProvider>
               <Layout />
-            </VideosContextProvider>
+            </RemoteMediaContextProvider>
           </LocalMediaContextProvider>
         </MessagesContextProvider>
       </SessionContextProvider>

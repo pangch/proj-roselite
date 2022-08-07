@@ -68,3 +68,9 @@ export function useSessionId() {
   const { sessionInfo } = useSessionContext();
   return sessionInfo?.id;
 }
+
+export function useOtherUsers() {
+  const id = useSessionId();
+  const { users } = useSessionContext();
+  return users.filter((user) => user.id !== id);
+}

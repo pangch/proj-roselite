@@ -14,7 +14,7 @@ export default function Layout() {
     <div className="flex flex-col grow h-screen">
       <Title />
       <div className="flex grow">
-        <div className="flex flex-col basis-1/4 shrink-0">
+        <div className="flex flex-col basis-1/5 shrink-0">
           <Users />
         </div>
         <div className="flex flex-col grow">

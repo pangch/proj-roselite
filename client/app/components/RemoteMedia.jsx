@@ -2,43 +2,51 @@ import * as React from "react";
 import { useRef, useEffect } from "react";
 import classNames from "classnames";
 import { isEmpty } from "lodash";
-import { useVideosContext } from "../contexts/VideosContext";
-import { removeVideoElement, setVideoElement } from "../models/videos";
+import {
+  useIsUserMediaActive,
+  useRemoteMediaContext,
+} from "../contexts/RemoteMediaContext";
+import { useOtherUsers } from "../contexts/SessionContext";
+import { getRemoteMediaModel } from "../models/remote-media-model";
 
 function RemoteVideoItem({ userId }) {
   const videoRef = useRef(null);
 
+  const remoteMediaModel = getRemoteMediaModel();
   useEffect(() => {
-    setVideoElement(userId, videoRef.current);
+    remoteMediaModel.setVideoElement(userId, videoRef.current);
     return () => {
-      removeVideoElement(userId);
+      remoteMediaModel.clearVideoElement(userId);
     };
   }, [userId]);
 
   return <video className="video" ref={videoRef} autoPlay playsInline />;
 }
 
-function RemoteVideoContainer({ video }) {
+function RemoteVideoContainer({ user }) {
+  const isActive = useIsUserMediaActive();
   return (
-    <div className="video-container">
-      <RemoteVideoItem userId={video.userId} />
+    <div className={classNames("video-container", !isActive && "hidden")}>
+      <RemoteVideoItem userId={user.userId} />
     </div>
   );
 }
 
 export default function RemoteMedia() {
-  const { videos } = useVideosContext();
+  const { activeUsers } = useRemoteMediaContext();
+  const otherUsers = useOtherUsers();
+
   return (
     <section
       className={classNames(
-        "section-videos",
+        "section-remote-videos",
         "flex",
         "flex-wrap",
-        isEmpty(videos) && "hidden"
+        isEmpty(activeUsers) && "hidden"
       )}
     >
-      {videos.map((video) => (
-        <RemoteVideoContainer key={video.userId} video={video} />
+      {otherUsers.map((user) => (
+        <RemoteVideoContainer key={user.id} user={user} />
       ))}
     </section>
   );

@@ -5,12 +5,14 @@ import { useSessionContext, useSessionId } from "../contexts/SessionContext";
 import { getSessionModel } from "../models/session-model";
 import { useLocalMediaContext } from "../contexts/LocalMediaContext";
 import { getLocalMediaModel } from "../models/local-media-model";
+import { useIsUserMediaActive } from "../contexts/RemoteMediaContext";
 
 function UserSelfEditor({ user, onDone }) {
   const [name, setName] = useState(user.username);
   const handleDone = () => {
     if (!isEmpty(name)) {
-      getSessionModel().setUsername(name.slice(0, 20));
+      console.log("Sliced name", name.slice(0, 48));
+      getSessionModel().setUsername(name.slice(0, 48));
     }
     onDone();
   };
@@ -33,7 +35,7 @@ function UserSelfEditor({ user, onDone }) {
   );
 }
 
-function VideoButton() {
+function LocalVideoButton() {
   const { isActive } = useLocalMediaContext();
   const localMediaModel = getLocalMediaModel();
 
@@ -69,22 +71,20 @@ function UserSelf({ user }) {
   }
   return (
     <li className="user-item self flex items-center">
-      <span className="grow basis-0 truncate">
-        <span className="truncate">{username}</span>
-      </span>
+      <span className="grow basis-0 grow truncate">{username}</span>
       <span className="icon-button grow-0" onClick={() => setIsEdit(true)}>
         <i className="fa fa-pencil" />
         Rename
       </span>
-      <VideoButton />
+      <LocalVideoButton />
     </li>
   );
 }
 
 function UserOther({ user }) {
   return (
-    <li className="user-item flex items-center basis-0 truncate">
-      {user.username}
+    <li className="user-item flex items-center">
+      <span className="grow basis-0 grow truncate">{user.username}</span>
     </li>
   );
 }

@@ -53,7 +53,7 @@ ul {
 
 .section-users {
   border: 2px solid #FEFFFF;
-  min-width: 15rem;
+  min-width: 16rem;
   margin: 0 1rem;
   padding: 0.5rem;
 }
@@ -183,11 +183,11 @@ ul {
   border: 2px solid #FEFFFF;
 }
 
-.section-videos {
+.section-remote-videos {
   margin-bottom: 1rem;
 }
 
-.section-videos .video-container {
+.section-remote-videos .video-container {
   margin-right: 1rem;
 }
 

@@ -9,7 +9,6 @@ let constraints = {
 
 export default class LocalMediaController {
   constructor(videoElement) {
-    console.log(videoElement);
     this.videoElement = videoElement;
   }
 
@@ -51,24 +50,3 @@ export default class LocalMediaController {
     this.stop();
   }
 }
-
-// export function startLocalVideo(userId) {
-//   enableVideoForUserId(userId);
-
-//   if (localMediaController != null) {
-//     return;
-//   }
-
-//   localMediaController = new LocalMediaController(userId);
-// }
-
-// export function stopLocalVideo(userId) {
-//   disableVideoForUserId(userId);
-
-//   if (localMediaController == null) {
-//     return;
-//   }
-
-//   localMediaController.stop();
-//   localMediaController = null;
-// }

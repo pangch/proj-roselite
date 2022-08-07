@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { useLocalMediaContext } from "../contexts/LocalMediaContext";
 import { getLocalMediaModel } from "../models/local-media-model";
 
-function LocalMediaItem() {
+function LocalVideoItem() {
   const videoRef = useRef(null);
   const localMediaModel = getLocalMediaModel();
 
@@ -18,10 +18,10 @@ function LocalMediaItem() {
   return <video className="video" ref={videoRef} autoPlay playsInline />;
 }
 
-function LocalMediaContainer() {
+function LocalVideoContainer() {
   return (
     <div className="video-container">
-      <LocalMediaItem />
+      <LocalVideoItem />
     </div>
   );
 }
@@ -32,7 +32,7 @@ export default function LocalMedia() {
     <section
       className={classNames("section-local-media", { hidden: !isActive })}
     >
-      <LocalMediaContainer />
+      <LocalVideoContainer />
     </section>
   );
 }
