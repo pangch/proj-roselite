@@ -15,7 +15,7 @@ function LocalVideoItem() {
     };
   }, []);
 
-  return <video className="video" ref={videoRef} autoPlay playsInline />;
+  return <video className="video" ref={videoRef} autoPlay playsInline muted />;
 }
 
 function LocalVideoContainer() {

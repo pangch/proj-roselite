@@ -167,7 +167,6 @@ class PeerConnectionController {
   }
 
   async maybeAddIceCandidate(message) {
-    console.log("Adding", message);
     const { userId, ...otherData } = message;
     if (this.peerUserId == null) {
       logger.info("Ignoring RTC ICE candidate because not in handshaking.");
