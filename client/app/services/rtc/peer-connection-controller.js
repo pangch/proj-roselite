@@ -22,19 +22,12 @@ class PeerConnectionController {
   }
 
   #setupLocal() {
-    if (this.peerConnection == null) {
-      this.#initializePeerConnection();
+    if (this.peerConnection != null) {
+      logger.error("Already have peer connection when initialzing");
+      return;
     }
-    const localStream = this.localMediaController.stream;
-    if (localStream == null) {
-      logger.error("Failed to add local streams to peer connection");
-    }
-    localStream
-      .getTracks()
-      .forEach((track) => this.peerConnection.addTrack(track, localStream));
 
-    getWSRtcService().signalReady();
-    logger.info("RTCPeerConnection local ready");
+    this.#initializePeerConnection();
   }
 
   #cleanup() {
@@ -58,37 +51,44 @@ class PeerConnectionController {
     const pc = new RTCPeerConnection();
     this.peerConnection = pc;
 
-    pc.addEventListener("icecandidate", (event) =>
-      this.handleIceCandidate(event.candidate)
-    );
-    pc.addEventListener("track", (event) => this.handleTrack(event));
-    logger.info("RTCPeerConnection created");
+    pc.onicecandidate = (event) => this.handleIceCandidate(event);
+    pc.ontrack = (event) => this.handleTrack(event);
+
+    const localStream = this.localMediaController.stream;
+    if (localStream == null) {
+      logger.error("Failed to add local streams to peer connection");
+    }
+    localStream
+      .getTracks()
+      .forEach((track) => this.peerConnection.addTrack(track, localStream));
+
+    getWSRtcService().signalReady();
+    logger.info("RTCPeerConnection local ready");
   }
 
   handleTrack(event) {
     logger.info("Recieved track");
   }
 
-  handleIceCandidate(candidate) {
-    logger.info(
-      `Handling ICECandidate from RTCPeerConnection: ${JSON.stringify(
-        candidate
-      )}`
-    );
-    getWSRtcService().signalCandidate(candidate);
+  handleIceCandidate(event) {
+    logger.info(`Handling ICECandidate from RTCPeerConnection`);
+    getWSRtcService().signalCandidate(event.candidate);
   }
 
   async maybeStartCall(userId) {
+    if (this.peerConnection == null) {
+      logger.info("Ignoring RTC ready because local video is not up");
+      return;
+    }
     if (this.peerUserId != null) {
-      logger.info("Ignoring RTC ready because already in call");
+      logger.info(
+        `Ignoring RTC ready because already in call with ${this.peerUserId}`
+      );
       return;
     }
     logger.info(`Attempting to start call with ${userId}`);
 
     this.peerUserId = userId;
-    if (this.peerConnection == null) {
-      this.#initializePeerConnection();
-    }
 
     const pc = this.peerConnection;
     const offer = await pc.createOffer();
