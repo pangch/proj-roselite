@@ -84,7 +84,7 @@ ul {
 
 .section-info {
   border: 2px solid #FEFFFF;
-  min-width: 16rem;
+  width: 224px;
   min-height: 10rem;
   margin: 0 1rem;
   padding: 0.5rem;
@@ -173,18 +173,22 @@ ul {
   color: #FEFFFF;
 }
 
+.section-local-media {
+  margin: 0 1rem 1rem 1rem;
+}
+
+.video {
+  width: 240px;
+  height: 180px;
+  border: 2px solid #FEFFFF;
+}
+
 .section-videos {
   margin-bottom: 1rem;
 }
 
 .section-videos .video-container {
   margin-right: 1rem;
-}
-
-.section-videos .video {
-  width: 240px;
-  height: 180px;
-  border: 2px solid #FEFFFF;
 }
 
 .section-console {

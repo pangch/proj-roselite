@@ -47,6 +47,10 @@ class SessionModel extends Observable {
     ws?.notifyUsername(newUsername);
   }
 
+  getUserFromId(userId) {
+    return this.users.find((user) => user.id === userId);
+  }
+
   updateUserList(newUsers) {
     this.users = newUsers;
     this.users.forEach((user) => {
@@ -63,13 +67,13 @@ class SessionModel extends Observable {
     }
     const newUsers = [...this.users, newUser];
     this.usernames.set(newUser.id, newUser.username);
-    updateUserList(newUsers);
+    this.updateUserList(newUsers);
   }
 
   removeUser(userId) {
     if (this.users.find((user) => user.id === userId)) {
       const newUsers = this.users.filter((user) => user.id !== userId);
-      updateUserList(newUsers);
+      this.updateUserList(newUsers);
     }
   }
 

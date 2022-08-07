@@ -6,7 +6,8 @@ import Messages from "./components/Messages";
 import Input from "./components/Input";
 import Info from "./components/Info";
 import Console from "./components/Console";
-import RemoteVideos from "./components/RemoteVideos";
+import RemoteVideos from "./components/RemoteMedia";
+import LocalMedia from "./components/LocalMedia";
 
 export default function Layout() {
   return (
@@ -21,7 +22,8 @@ export default function Layout() {
           <Messages />
           <Input />
         </div>
-        <div className="flex flex-col basis-1/5 shrink-0">
+        <div className="flex flex-col grow-0 shrink-0">
+          <LocalMedia />
           <Info />
         </div>
       </div>

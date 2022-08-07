@@ -2,9 +2,9 @@ import * as React from "react";
 import { useState } from "react";
 import { isEmpty } from "lodash";
 import { useSessionContext, useSessionId } from "../contexts/SessionContext";
-import { startLocalVideo, stopLocalVideo } from "../services/rtc/local-media";
-import { useVideoInfoForUserId } from "../contexts/VideosContext";
 import { getSessionModel } from "../models/session-model";
+import { useLocalMediaContext } from "../contexts/LocalMediaContext";
+import { getLocalMediaModel } from "../models/local-media-model";
 
 function UserSelfEditor({ user, onDone }) {
   const [name, setName] = useState(user.username);
@@ -33,13 +33,15 @@ function UserSelfEditor({ user, onDone }) {
   );
 }
 
-function VideoButton({ user }) {
-  const videoInfo = useVideoInfoForUserId(user.id);
-  if (videoInfo != null) {
+function VideoButton() {
+  const { isActive } = useLocalMediaContext();
+  const localMediaModel = getLocalMediaModel();
+
+  if (isActive) {
     return (
       <span
         className="icon-button grow-0"
-        onClick={() => stopLocalVideo(user.id)}
+        onClick={() => localMediaModel.deactivate()}
       >
         <i className="fa fa-video-camera" />
         Stop
@@ -49,7 +51,7 @@ function VideoButton({ user }) {
     return (
       <span
         className="icon-button grow-0"
-        onClick={() => startLocalVideo(user.id)}
+        onClick={() => localMediaModel.activate()}
       >
         <i className="fa fa-video-camera" />
         Start
@@ -74,7 +76,7 @@ function UserSelf({ user }) {
         <i className="fa fa-pencil" />
         Rename
       </span>
-      <VideoButton user={user} />
+      <VideoButton />
     </li>
   );
 }

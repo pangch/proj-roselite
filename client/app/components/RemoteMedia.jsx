@@ -21,12 +21,12 @@ function RemoteVideoItem({ userId }) {
 function RemoteVideoContainer({ video }) {
   return (
     <div className="video-container">
-      <VideoItem userId={video.userId} />
+      <RemoteVideoItem userId={video.userId} />
     </div>
   );
 }
 
-export default function RemoteVideos() {
+export default function RemoteMedia() {
   const { videos } = useVideosContext();
   return (
     <section
@@ -38,7 +38,7 @@ export default function RemoteVideos() {
       )}
     >
       {videos.map((video) => (
-        <VideoContainer key={video.userId} video={video} />
+        <RemoteVideoContainer key={video.userId} video={video} />
       ))}
     </section>
   );
