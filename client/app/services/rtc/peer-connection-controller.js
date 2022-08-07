@@ -113,6 +113,9 @@ class PeerConnectionController {
     this.peerUserId = userId;
 
     const pc = this.peerConnection;
+
+    // pc.addTransceiver("video");
+
     const offer = await pc.createOffer();
     logger.info(`Created offer \n${offer.sdp}`);
 

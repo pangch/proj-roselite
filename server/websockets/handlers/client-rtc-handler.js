@@ -11,6 +11,8 @@ export default class ClientRtcHandler {
   handleMessage(message) {
     try {
       switch (message.type) {
+        case "rtc-relay":
+          return this.onRtcRelay(message);
         case "rtc-ready":
         case "rtc-candidate":
         case "rtc-offer":
@@ -24,6 +26,25 @@ export default class ClientRtcHandler {
       this.client.logger.error(`Failed to handle message: ${message}`, error);
     }
     return true;
+  }
+
+  onRtcRelay(message) {
+    const { recipientId, data } = message;
+
+    const type =
+      data.candidate != null
+        ? "candidate"
+        : data.description != null
+        ? "description"
+        : "message";
+    logger.debug(
+      `Relaying RTC ${type} from ${this.client.id} to ${recipientId}`
+    );
+    sendMessageToUser({
+      senderId: this.client.id,
+      recipientId,
+      data,
+    });
   }
 
   onForwardRtcMessage(message) {
