@@ -18,10 +18,19 @@ export default class WSRtcService {
     });
   }
 
-  signalOffer(offer) {
+  signalOffer(userId, offer) {
     this.client.sendMessage({
       type: "rtc-offer",
+      toUserId: userId,
       sdp: offer.sdp,
+    });
+  }
+
+  signalAnswer(userId, answer) {
+    this.client.sendMessage({
+      type: "rtc-answer",
+      toUserId: userId,
+      sdp: answer.sdp,
     });
   }
 }

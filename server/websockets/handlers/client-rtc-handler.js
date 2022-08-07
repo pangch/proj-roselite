@@ -1,5 +1,5 @@
 import { createLogger } from "../../../common/logger.js";
-import { sendBroadcast } from "../client-controller.js";
+import { sendBroadcast, sendMessageToUser } from "../client-controller.js";
 
 const logger = createLogger("ClientRtcHandler");
 
@@ -28,11 +28,17 @@ export default class ClientRtcHandler {
 
   onForwardRtcMessage(message) {
     // Append userId and forward the RTC messages to client
+    const { toUserId, ...others } = message;
     message = {
-      ...message,
+      ...others,
       userId: this.client.id,
     };
-    logger.info("Forwarding RTC message.", message);
-    sendBroadcast(message, this.client.id);
+    if (toUserId != null) {
+      logger.info(`Forwarding RTC message to user ${toUserId}.`, message);
+      sendMessageToUser(message, toUserId);
+    } else {
+      logger.info("Forwarding RTC message to everyone.", message);
+      sendBroadcast(message, this.client.id);
+    }
   }
 }

@@ -65,7 +65,9 @@ class PeerConnectionController {
     logger.info("RTCPeerConnection created");
   }
 
-  handleTrack(event) {}
+  handleTrack(event) {
+    logger.info("Recieved track");
+  }
 
   handleIceCandidate(candidate) {
     logger.info(
@@ -76,21 +78,66 @@ class PeerConnectionController {
     getWSRtcService().signalCandidate(candidate);
   }
 
-  async startCallIfPossible(userId) {
+  async maybeStartCall(userId) {
     if (this.peerUserId != null) {
+      logger.info("Ignoring RTC ready because already in call");
       return;
     }
     logger.info(`Attempting to start call with ${userId}`);
+
+    this.peerUserId = userId;
     if (this.peerConnection == null) {
       this.#initializePeerConnection();
     }
 
     const pc = this.peerConnection;
     const offer = await pc.createOffer();
-    logger.info(`Created and signaling offer \n${offer.sdp}`);
+    logger.info(`Created offer \n${offer.sdp}`);
 
-    getWSRtcService().signalOffer(offer);
+    getWSRtcService().signalOffer(this.peerUserId, offer);
     await pc.setLocalDescription(offer);
+  }
+
+  async maybeAcceptOffer(userId, sdp) {
+    if (this.peerUserId != null) {
+      logger.info("Ignoring RTC offer because already in call");
+      return;
+    }
+
+    this.peerUserId = userId;
+    if (this.peerConnection == null) {
+      this.#initializePeerConnection();
+    }
+
+    const pc = this.peerConnection;
+    logger.info(`Accepted offer.`);
+    await pc.setRemoteDescription({ type: "offer", sdp });
+
+    const answer = await pc.createAnswer();
+    logger.info(`Created answer \n${answer.sdp}`);
+    getWSRtcService().signalAnswer(this.peerUserId, answer);
+
+    await pc.setLocalDescription(answer);
+  }
+
+  async maybeAcceptAnswer(userId, sdp) {
+    if (this.peerUserId == null) {
+      logger.info("Ignoring RTC answer because not in handshaking.");
+    }
+    if (this.peerUserId !== userId) {
+      logger.info(
+        "Ignoring RTC answer because it is not for current connection"
+      );
+      return;
+    }
+    if (this.peerConnection == null) {
+      logger.error("No peer connection when accepting answer");
+      return;
+    }
+
+    const pc = this.peerConnection;
+    logger.info(`Accepted answer.`);
+    await pc.setRemoteDescription({ type: "answer", sdp });
   }
 }
 

@@ -18,11 +18,23 @@ export function sendBroadcast(message, excludeId = null) {
   }
   logger.debug(`Broadcasting message: ${message}`);
   for (let client of clients.values()) {
-    if (excludeId != null && client.id == excludeId) {
-      return;
+    if (excludeId != null && client.id === excludeId) {
+      continue;
     }
     client.sendMessage(message);
   }
+}
+
+export function sendMessageToUser(message, toUserId) {
+  logger.debug(`Sending message to user ${toUserId}: ${message}`);
+  const client = clients.get(toUserId);
+  if (client == null) {
+    logger.error(
+      `Cannot send message to user because client not found. ${toUserId} Message: ${message}`
+    );
+    return;
+  }
+  client.sendMessage(message);
 }
 
 export default class ClientController {
