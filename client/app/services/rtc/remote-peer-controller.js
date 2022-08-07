@@ -43,6 +43,8 @@ export default class RemotePeerController {
     this.isPolite = this.userId > getSessionModel().sessionInfo.id;
 
     this.pc = new RTCPeerConnection();
+    this.pc.addTransceiver("video");
+    this.pc.addTransceiver("audio");
     this.pc.onicecandidate = (event) => this.handleIceCandidate(event);
     this.pc.ontrack = (event) => this.handleTrack(event);
     this.pc.onnegotiationneeded = async () => {
@@ -72,7 +74,9 @@ export default class RemotePeerController {
     try {
       this.flags.makingOffer = true;
       await this.pc.setLocalDescription();
-      getWSRtcService().sendData({ description: this.pc.localDescription });
+      getWSRtcService().sendData(this.userId, {
+        description: this.pc.localDescription,
+      });
     } catch (error) {
       logger.error("Error during negotiation", error);
     } finally {
@@ -95,7 +99,7 @@ export default class RemotePeerController {
 
   async onReceivedRtcCandidate(candidate) {
     try {
-      logger.debug(`Adding ICE candidate for ${this.userId}`);
+      logger.info(`Adding ICE candidate for ${this.userId}`);
       await this.pc.addIceCandidate(candidate);
     } catch (error) {
       if (!this.flags.ignoreOffer) {
@@ -118,14 +122,16 @@ export default class RemotePeerController {
       return;
     }
 
-    logger.debug(`Setting remote description for ${this.userId}`);
+    logger.info(`Setting remote description for ${this.userId}`);
     this.flags.isSettingRemoteAnswer = description.type === "answer";
     await this.pc.setRemoteDescription(description);
     this.flags.isSettingRemoteAnswer = false;
 
     if (description.type === "offer") {
       await this.pc.setLocalDescription();
-      signaling.send({ description: this.pc.localDescription });
+      getWSRtcService().sendData(this.userId, {
+        description: this.pc.localDescription,
+      });
     }
   }
 }

@@ -8,7 +8,7 @@ export default class WSRtcService {
   sendData(userId, data) {
     this.client.sendMessage({
       type: "rtc-relay",
-      userId,
+      recipientId: userId,
       data,
     });
   }

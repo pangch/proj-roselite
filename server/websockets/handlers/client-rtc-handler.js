@@ -29,22 +29,25 @@ export default class ClientRtcHandler {
   }
 
   onRtcRelay(message) {
-    const { recipientId, data } = message;
+    const { recipientId, type, data } = message;
 
-    const type =
+    const rtcType =
       data.candidate != null
         ? "candidate"
         : data.description != null
         ? "description"
         : "message";
     logger.debug(
-      `Relaying RTC ${type} from ${this.client.id} to ${recipientId}`
+      `Relaying RTC ${rtcType} from ${this.client.id} to ${recipientId}`
     );
-    sendMessageToUser({
-      senderId: this.client.id,
-      recipientId,
-      data,
-    });
+    sendMessageToUser(
+      {
+        senderId: this.client.id,
+        type,
+        data,
+      },
+      recipientId
+    );
   }
 
   onForwardRtcMessage(message) {
