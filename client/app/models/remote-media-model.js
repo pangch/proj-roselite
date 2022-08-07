@@ -13,7 +13,10 @@ class RemoteMediaModel extends Observable {
   setVideoElement(userId, videoElement) {
     this.videoElements.set(userId, videoElement);
 
-    this.remoteControllers.set(userId, new RemotePeerController(userId));
+    this.remoteControllers.set(
+      userId,
+      new RemotePeerController(userId, videoElement)
+    );
   }
 
   clearVideoElement(userId) {

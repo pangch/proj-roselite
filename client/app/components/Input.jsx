@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
+import { getMessagesModel } from "../models/messages-model";
 import { getWSService } from "../services/websockets";
 
 export default function Input() {
@@ -11,13 +12,12 @@ export default function Input() {
   const handleKeyPress = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      const ws = getWSService();
-      if (ws == null) {
+      const model = getMessagesModel();
+      if (!model.sendTextMessage(text)) {
         setHasError(true);
-        return;
+      } else {
+        setText("");
       }
-      ws.sendTextMessage(text.trim());
-      setText("");
     }
   };
 

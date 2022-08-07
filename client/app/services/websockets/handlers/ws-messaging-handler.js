@@ -24,7 +24,7 @@ export default class WSMessagingHandler {
   }
 
   onReceiveTextMessage(message) {
-    this.messagesModel.appendMessage({
+    this.messagesModel.appendNewMessage({
       type: "text",
       userId: message.userId,
       content: message.content,

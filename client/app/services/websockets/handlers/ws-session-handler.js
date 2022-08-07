@@ -41,7 +41,7 @@ export default class WSSessionHandler {
 
   onJoined(message) {
     this.sessionModel.addUser(message.user);
-    this.messagesModel.appendMessage({
+    this.messagesModel.appendNewMessage({
       type: "status",
       userId: message.user.id,
       content: `${message.user.username} joined.`,
@@ -52,7 +52,7 @@ export default class WSSessionHandler {
     const user = this.sessionModel.getUserFromId(message.id);
     this.sessionModel.removeUser(message.id);
 
-    this.messagesModel.appendMessage({
+    this.messagesModel.appendNewMessage({
       type: "status",
       userId: message.id,
       content: `${user.username} left.`,

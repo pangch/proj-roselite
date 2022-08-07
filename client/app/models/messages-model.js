@@ -1,9 +1,10 @@
 import Observable from "../../../common/observable.js";
+import { getWSService } from "../services/websockets/index.js";
 
 class MessagesModel extends Observable {
   currentId = 0;
 
-  appendMessage(message) {
+  appendNewMessage(message) {
     this.emit({
       type: "new",
       item: {
@@ -13,6 +14,16 @@ class MessagesModel extends Observable {
         content: message.content,
       },
     });
+  }
+
+  sendTextMessage(text) {
+    const ws = getWSService();
+    if (ws == null) {
+      false;
+      return;
+    }
+    ws.sendTextMessage(text.trim());
+    return true;
   }
 }
 
