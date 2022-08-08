@@ -93,7 +93,7 @@ header {
 
 .section-info {
   border: 2px solid #FEFFFF;
-  width: 224px;
+  width: 240px;
   min-height: 10rem;
   margin: 0 1rem;
   font-family: 'Roboto Mono', monospace;
@@ -107,15 +107,21 @@ header {
   background: #FEFFFF;
   color: #17252A;
   overflow-x: hidden;
+  font-size: x-small;
+}
+
+.info-block header {
+  color: #17252A;
+  font-size: x-small;
+  padding: 0;
 }
 
 .info-row {
   display: flex;
   align-items: center;
-  font-size: x-small;
 }
 
-.info-header {
+.info-name {
   flex-grow: 0;
   font-weight: 500;
 }

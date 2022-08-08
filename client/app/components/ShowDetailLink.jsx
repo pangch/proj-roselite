@@ -5,7 +5,6 @@ function DetailView({ isShown, setIsShown, details }) {
   if (!isShown) {
     return null;
   }
-  console.log("Here");
   return (
     <div className="details-container">
       <div className="details-content flex flex-col">

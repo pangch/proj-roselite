@@ -11,6 +11,7 @@ class RemoteMediaModel extends Observable {
   activeUsers = [];
   videoElements = new Map();
   remoteControllers = new Map();
+  remoteControllersUnsubscribers = new Map();
 
   constructor() {
     super();
@@ -55,7 +56,13 @@ class RemoteMediaModel extends Observable {
     this.videoElements.set(userId, videoElement);
 
     const remoteController = new RemotePeerController(userId, videoElement);
+
     this.remoteControllers.set(userId, remoteController);
+    // Relay this action to parent subscriber
+    const unsubscribe = remoteController.subscribe((action) =>
+      this.emit(action)
+    );
+    this.remoteControllersUnsubscribers.set(unsubscribe);
 
     const localMediaModel = getLocalMediaModel();
     const localStream = localMediaModel.localController?.stream;
@@ -69,6 +76,11 @@ class RemoteMediaModel extends Observable {
     this.videoElements.delete(userId);
 
     const remoteController = this.remoteControllers.get(userId);
+    const unsubscriber = this.remoteControllersUnsubscribers.get(userId);
+    if (unsubscriber != null) {
+      unsubscriber();
+      this.remoteControllersUnsubscribers.delete(userId);
+    }
     if (remoteController != null) {
       this.remoteControllers.delete(userId);
       remoteController.shutdown();

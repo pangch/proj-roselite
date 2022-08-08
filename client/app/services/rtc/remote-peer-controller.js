@@ -1,17 +1,19 @@
 import { createLogger } from "../../../../common/logger.js";
-import { getRemoteMediaModel } from "../../models/remote-media-model.js";
+import Observable from "../../../../common/observable.js";
 import { getSessionModel } from "../../models/session-model.js";
 import { getWSRtcService } from "../websockets/index.js";
 
 let logger = createLogger("RemotePeerController");
 
-export default class RemotePeerController {
+export default class RemotePeerController extends Observable {
   pc = null;
   flags = {}; // Flags used for negoatiation
 
   senders = [];
 
   constructor(userId, videoElement) {
+    super();
+
     this.userId = userId;
     this.remoteVideo = videoElement;
   }
@@ -37,6 +39,8 @@ export default class RemotePeerController {
 
   shutdown() {
     if (this.pc != null) {
+      this.emit({ type: "remove-peer-connection", userId: this.userId });
+
       this.pc.close();
       this.pc = null;
       this.senders = [];
@@ -62,6 +66,8 @@ export default class RemotePeerController {
     this.pc.onnegotiationneeded = async () => {
       await this.handleNegotiationNeeded();
     };
+
+    this.emit({ type: "create-peer-connection", userId: this.userId });
   }
 
   handleTrack({ track, streams }) {
@@ -79,6 +85,13 @@ export default class RemotePeerController {
 
   handleIceCandidate({ candidate }) {
     logger.info("Sending ICE candidate...");
+
+    this.emit({
+      type: "add-local-candidate",
+      userId: this.userId,
+      candidate,
+    });
+
     getWSRtcService()?.sendData(this.userId, { candidate });
   }
 
@@ -87,6 +100,13 @@ export default class RemotePeerController {
     try {
       this.flags.makingOffer = true;
       await this.pc.setLocalDescription();
+
+      this.emit({
+        type: "set-local-description",
+        userId: this.userId,
+        description: this.pc.localDescription,
+      });
+
       getWSRtcService().sendData(this.userId, {
         description: this.pc.localDescription,
       });
@@ -114,6 +134,12 @@ export default class RemotePeerController {
     try {
       logger.info(`Adding ICE candidate for ${this.userId}`);
       await this.pc.addIceCandidate(candidate);
+
+      this.emit({
+        type: "add-remote-candidate",
+        userId: this.userId,
+        candidate,
+      });
     } catch (error) {
       if (!this.flags.ignoreOffer) {
         throw error;
@@ -139,9 +165,19 @@ export default class RemotePeerController {
     this.flags.isSettingRemoteAnswer = description.type === "answer";
     await this.pc.setRemoteDescription(description);
     this.flags.isSettingRemoteAnswer = false;
+    this.emit({
+      type: "set-remote-description",
+      userId: this.userId,
+      description,
+    });
 
     if (description.type === "offer") {
       await this.pc.setLocalDescription();
+      this.emit({
+        type: "set-local-description",
+        userId: this.userId,
+        description: this.pc.localDescription,
+      });
       getWSRtcService().sendData(this.userId, {
         description: this.pc.localDescription,
       });
