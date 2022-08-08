@@ -1,6 +1,7 @@
 import { createLogger } from "../../../common/logger.js";
 import Observable from "../../../common/observable.js";
 import RemotePeerController from "../services/rtc/remote-peer-controller.js";
+import { getWSRtcService } from "../services/websockets/index.js";
 import { getLocalMediaModel } from "./local-media-model.js";
 import { getSessionModel } from "./session-model.js";
 
@@ -52,10 +53,16 @@ class RemoteMediaModel extends Observable {
 
   setVideoElement(userId, videoElement) {
     this.videoElements.set(userId, videoElement);
-    this.remoteControllers.set(
-      userId,
-      new RemotePeerController(userId, videoElement)
-    );
+
+    const remoteController = new RemotePeerController(userId, videoElement);
+    this.remoteControllers.set(userId, remoteController);
+
+    const localMediaModel = getLocalMediaModel();
+    const localStream = localMediaModel.localController?.stream;
+    if (localMediaModel.isActive && localStream?.active === true) {
+      remoteController.addLocalStream(localStream);
+      getWSRtcService()?.notifyReady();
+    }
   }
 
   clearVideoElement(userId) {
