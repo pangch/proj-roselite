@@ -1,6 +1,6 @@
 # proj-roselite
 
-## WebRTC Playground
+## WebRTC playground
 
 For learning and testing WebRTC only. This repo implements a basic chatroom with some video calling capabilities.
 
@@ -25,5 +25,5 @@ sudo mkdir -p ./system/dhparam && openssl dhparam -out ./system/dhparam/dhparam-
 ```
 
 ## References
-
+- [W3C WebRTC Perfect negotiation example](https://www.w3.org/TR/webrtc/#perfect-negotiation-example)
 - [How To Secure a Containerized Node.js Application with Nginx, Let's Encrypt, and Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-secure-a-containerized-node-js-application-with-nginx-let-s-encrypt-and-docker-compose)
