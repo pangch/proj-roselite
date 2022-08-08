@@ -1,8 +1,10 @@
 # proj-roselite
 
-## WebRPC Playground
+## WebRTC Playground
 
-For learning and testing WebRPC only. This repo implements a basic chatroom with some video calling capabilities.
+For learning and testing WebRTC only. This repo implements a basic chatroom with some video calling capabilities.
+
+It uses the same WebSocket server for text chat and RTC signaling. It is possible to do multi-way video call, and currently there would be P2P connection established between each pair of user, so it won't scale. Also there's no backend storage so everything is transient. 
 
 ## Notes
 
