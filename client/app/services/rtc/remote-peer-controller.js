@@ -5,6 +5,23 @@ import { getWSRtcService } from "../websockets/index.js";
 
 let logger = createLogger("RemotePeerController");
 
+const ICE_CONFIG = {
+  iceServers: [
+    {
+      url: "stun:stun.l.google.com:19302",
+    },
+    {
+      url: "stun:stun1.l.google.com:19302",
+    },
+    {
+      url: "stun:stun4.l.google.com:19302",
+    },
+    {
+      url: "stun:stun.voipstunt.com",
+    },
+  ],
+};
+
 export default class RemotePeerController extends Observable {
   pc = null;
   flags = {}; // Flags used for negoatiation
@@ -58,7 +75,7 @@ export default class RemotePeerController extends Observable {
     // determine politeness based on user_id so that it is deterministic on both ends
     this.isPolite = this.userId > getSessionModel().sessionInfo.id;
 
-    this.pc = new RTCPeerConnection();
+    this.pc = new RTCPeerConnection(ICE_CONFIG);
     this.pc.addTransceiver("video");
     this.pc.addTransceiver("audio");
     this.pc.onicecandidate = (event) => this.handleIceCandidate(event);
