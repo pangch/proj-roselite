@@ -58,6 +58,10 @@
   overflow-y: scroll;
 }
 
+.overflow-scroll {
+  overflow: scroll;
+}
+
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;

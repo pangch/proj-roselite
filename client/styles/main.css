@@ -22,6 +22,15 @@ ul {
   margin: 0;
 }
 
+header {
+  font-weight: 500;
+  font-size: small;
+  padding: 0.1rem 0.5rem;
+  margin-bottom: 0.2rem;
+  background: #FEFFFF;
+  color: #2B7A78;
+}
+
 #app {
   margin: 0;
   padding: 0;
@@ -57,15 +66,6 @@ ul {
   margin: 0 1rem;
 }
 
-.section-users > header {
-  font-weight: 500;
-  font-size: small;
-  padding: 0.1rem 0.5rem;
-  margin-bottom: 0.2rem;
-  background: #FEFFFF;
-  color: #2B7A78;
-}
-
 .section-users input {
   background: #2B7A78;
   padding: 0.2rem 0.5rem;
@@ -93,13 +93,76 @@ ul {
 
 .section-info {
   border: 2px solid #FEFFFF;
-  background: #FEFFFF;
   width: 224px;
   min-height: 10rem;
   margin: 0 1rem;
-  padding: 0.5rem;
   font-family: 'Roboto Mono', monospace;
   font-size: small;
+}
+
+.section-info .info-block {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.1rem;
+  background: #FEFFFF;
+  color: #17252A;
+  overflow-x: hidden;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  font-size: x-small;
+}
+
+.info-header {
+  flex-grow: 0;
+  font-weight: 500;
+}
+
+.info-value {
+  flex-grow: 1;
+  text-align: right;
+}
+
+.info-value pre {
+  margin: 0;
+}
+
+.details-link {
+  text-decoration: underline;
+  color: #2B7A78;
+  cursor: pointer;
+}
+
+.details-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vh;
+  height: 100vh;
+}
+
+.details-content {
+  width: 80vh;
+  background-color: #FEFFFF;
+  margin: 10rem auto;
+  border: 1px solid #2B7A78;
+  box-shadow: 2px 2px 2px 1px #17252a20;
+}
+
+.details-content header {
+  border-bottom: 1px solid #2B7A78;
+  padding: 0.5rem;
+}
+
+.details-content-body {
+  padding: 0.5rem;
+}
+
+.close-button {
+  font-size: x-large;
+  cursor: pointer;
 }
 
 .section-messages {
