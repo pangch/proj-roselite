@@ -8,21 +8,25 @@ function RtcDescriptionDetail({ description }) {
   return (
     <div>
       <strong>Type: {description.type}</strong>
+      <hr />
       <pre>{description.sdp}</pre>
     </div>
   );
 }
 
 function RtcCandidateDetail({ candidates }) {
-  return candidates.map((c, index) => (
-    <div key={index}>
-      <div>SDP Mid: {c.sdpMid}</div>
-      <div>SDP MLineIndex: {c.sdpMLineIndex}</div>
-      <div>Username Fragment: {c.usernameFragment}</div>
-      <div>Candidate: {c.candidate}</div>
-      <hr />
-    </div>
-  ));
+  return candidates.map(
+    (c, index) =>
+      c && (
+        <div key={index}>
+          <div>SDP Mid: {c.sdpMid}</div>
+          <div>SDP MLineIndex: {c.sdpMLineIndex}</div>
+          <div>Username Fragment: {c.usernameFragment}</div>
+          <div>Candidate: {c.candidate}</div>
+          <hr />
+        </div>
+      )
+  );
 }
 
 function RtcInfoBlock({ userId, info }) {
@@ -107,8 +111,10 @@ function LocalInfoBlock() {
           {deviceInfo.state === "ready" && (
             <ShowDetailLink
               label="Show"
-              details={deviceInfo.detail.map((device) => (
-                <pre key={device.id}>{JSON.stringify(device)}</pre>
+              details={deviceInfo.detail.map((device, index) => (
+                <div key={index}>
+                  <pre>{JSON.stringify(device)}</pre>
+                </div>
               ))}
             />
           )}
