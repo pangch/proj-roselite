@@ -111,6 +111,7 @@ export default function Users() {
   const { users, username } = useSessionContext();
   return (
     <section className="section-users grow">
+      <header>Online</header>
       <ul>
         {users != null && users?.length > 0 ? (
           <UserList users={users} />

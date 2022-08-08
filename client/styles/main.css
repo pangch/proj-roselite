@@ -55,7 +55,15 @@ ul {
   border: 2px solid #FEFFFF;
   min-width: 16rem;
   margin: 0 1rem;
-  padding: 0.5rem;
+}
+
+.section-users > header {
+  font-weight: 500;
+  font-size: small;
+  padding: 0.1rem 0.5rem;
+  margin-bottom: 0.2rem;
+  background: #FEFFFF;
+  color: #2B7A78;
 }
 
 .section-users input {
@@ -75,6 +83,7 @@ ul {
 .section-users .user-item {
   line-height: 1.5rem;
   height: 2.0em;
+  padding: 0 0.5rem;
   border-bottom: 1px solid #DEF2F1;
 }
 
@@ -84,6 +93,7 @@ ul {
 
 .section-info {
   border: 2px solid #FEFFFF;
+  background: #FEFFFF;
   width: 224px;
   min-height: 10rem;
   margin: 0 1rem;
@@ -99,7 +109,6 @@ ul {
 
 .section-messages .message {
   margin: 0.2rem 0;
-  padding: 0.2rem 0.5rem;
   border-radius: 0.5rem;
   max-width: 80%;
 }
@@ -109,6 +118,7 @@ ul {
   color: #DEF2F1;
   font-size: x-small;
   font-weight: 300;
+  padding: 0.2rem 0.5rem;
 }
 
 .section-messages .text-message .username {
@@ -116,7 +126,7 @@ ul {
   border-bottom-style: solid;
   font-weight: 500;
   font-size: x-small;
-  padding-bottom: 0.2rem;
+  padding: 0.2rem 0.5rem;
   margin-bottom: 0.2rem;
 }
 
@@ -124,6 +134,7 @@ ul {
   font-size: small;
   font-weight: 300;
   font-family: 'Roboto Mono', monospace;
+  padding: 0.1rem 0.5rem 0.2rem 0.5rem;
   margin: 0;
 }
 
@@ -171,6 +182,11 @@ ul {
   outline: none;
   resize: none;
   color: #FEFFFF;
+}
+
+.section-input .icon-button {
+  margin-left: 0;
+  padding: 0.5rem;
 }
 
 .section-local-media {

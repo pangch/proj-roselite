@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
+import { isEmpty } from "lodash";
 import { getMessagesModel } from "../models/messages-model";
-import { getWSService } from "../services/websockets";
 
 export default function Input() {
   const [text, setText] = useState("");
@@ -9,15 +9,23 @@ export default function Input() {
 
   const inputRef = useRef(null);
 
+  const handleSend = () => {
+    if (isEmpty(text)) {
+      setText("");
+      return;
+    }
+    const model = getMessagesModel();
+    if (!model.sendTextMessage(text)) {
+      setHasError(true);
+    } else {
+      setText("");
+    }
+  };
+
   const handleKeyPress = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      const model = getMessagesModel();
-      if (!model.sendTextMessage(text)) {
-        setHasError(true);
-      } else {
-        setText("");
-      }
+      handleSend();
     }
   };
 
@@ -34,14 +42,19 @@ export default function Input() {
   }, []);
 
   return (
-    <section className="section-input flex flex-col" autoFocus>
+    <section className="section-input flex" autoFocus>
       <textarea
+        className="grow"
         rows="3"
         value={text}
         onChange={handleChange}
         onKeyPress={handleKeyPress}
         ref={inputRef}
       />
+      <span className="icon-button grow-0" onClick={handleSend}>
+        <i className="fa fa-send" />
+        <span>Send</span>
+      </span>
     </section>
   );
 }
