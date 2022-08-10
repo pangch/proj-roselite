@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { useRtcInfoContext } from "../contexts/RtcInfoContext";
 import { useUserNameFromId } from "../contexts/SessionContext";
+import { getDevicesModel } from "../models/devices-model";
 import ShowDetailLink from "./ShowDetailLink";
 
 function RtcDescriptionDetail({ description }) {
@@ -90,36 +91,47 @@ function RtcInfoBlock({ userId, info }) {
 }
 
 function LocalInfoBlock() {
-  const [deviceInfo, setDeviceInfo] = useState({ state: "querying" });
+  const devicesModel = getDevicesModel();
+  const [deviceInfo, setDeviceInfo] = useState(devicesModel.devices);
+
   useEffect(() => {
-    navigator.mediaDevices
-      .enumerateDevices()
-      .then((info) => {
-        setDeviceInfo({ state: "ready", detail: info });
-      })
-      .catch((err) => {
-        setDeviceInfo({ state: "error", detail: err.message });
-      });
-  }, []);
+    const unsubscribe = getDevicesModel().subscribe((action) =>
+      setDeviceInfo(action.devices)
+    );
+    return () => unsubscribe();
+  }, [devicesModel]);
   return (
     <div className="info-block">
       <div className="info-row">
         <span className="info-name">Devices</span>
         <span className="info-value">
-          {deviceInfo.state === "querying" && "Querying..."}
-          {deviceInfo.state === "error" && `Error: ${deviceInfo.detail}`}
-          {deviceInfo.state === "ready" && (
-            <ShowDetailLink
-              label="Show"
-              details={deviceInfo.detail.map((device, index) => (
-                <div key={index}>
-                  <pre>{JSON.stringify(device)}</pre>
-                </div>
-              ))}
-            />
+          {deviceInfo.state === "none" && (
+            <div
+              className="details-link"
+              onClick={() => devicesModel.queryDevices()}
+            >
+              Load
+            </div>
+          )}
+          {deviceInfo.state === "error" && (
+            <ShowDetailLink label="Error" details={deviceInfo.detail} />
           )}
         </span>
       </div>
+      {deviceInfo.state === "ready" && (
+        <div className="info-row flex flex-col">
+          <strong>Audio Input</strong>
+          {deviceInfo.data?.audioinput &&
+            Object.entries(deviceInfo.data.audioinput).map(([id, label]) => (
+              <div key={id}>{label}</div>
+            ))}
+          <strong>Video Input</strong>
+          {deviceInfo.data?.videoinput &&
+            Object.entries(deviceInfo.data?.videoinput).map(([id, label]) => (
+              <div key={id}>{label}</div>
+            ))}
+        </div>
+      )}
     </div>
   );
 }
