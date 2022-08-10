@@ -62,7 +62,18 @@ hr {
 }
 
 .section-title {
-  padding: 0.5rem 2rem;
+  padding: 1rem;
+}
+
+.section-title .title-header {
+  font-size: x-large;
+}
+
+.section-title .title-notes {
+  text-align: right;
+  font-weight: 300;
+  font-size: x-small;
+  line-height: 1.3;
 }
 
 .section-users {
