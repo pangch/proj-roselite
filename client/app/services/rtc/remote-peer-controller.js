@@ -8,16 +8,14 @@ let logger = createLogger("RemotePeerController");
 const ICE_CONFIG = {
   iceServers: [
     {
-      url: "stun:stun.l.google.com:19302",
+      url: "stun:webrtc.chenpang.dev",
+      username: "webrtc",
+      credential: "3NhqpYVoiTqq0",
     },
     {
-      url: "stun:stun1.l.google.com:19302",
-    },
-    {
-      url: "stun:stun4.l.google.com:19302",
-    },
-    {
-      url: "stun:stun.voipstunt.com",
+      url: "turn:webrtc.chenpang.dev",
+      username: "webrtc",
+      credential: "3NhqpYVoiTqq0",
     },
   ],
 };

@@ -37,6 +37,7 @@ services:
     container_name: coturn
     network_mode: host
     volumes:
+      - certbot-var:/var/lib/letsencrypt
       - ./system/coturn/turnserver.conf:/etc/coturn/turnserver.conf
 
   certbot:
