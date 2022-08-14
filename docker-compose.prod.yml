@@ -39,6 +39,7 @@ services:
     depends_on:
       - webserver
     volumes:
+      - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
       - ./system/coturn/turnserver.conf:/etc/coturn/turnserver.conf
 
