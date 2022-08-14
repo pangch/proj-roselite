@@ -32,6 +32,13 @@ services:
     networks:
       - intern
 
+  coturn:
+    image: coturn/coturn:4-alpine
+    container_name: coturn
+    network_mode: host
+    volumes:
+      - ./system/coturn/turnserver.conf:/etc/coturn/turnserver.conf
+
   certbot:
     image: certbot/certbot:latest
     container_name: certbot
