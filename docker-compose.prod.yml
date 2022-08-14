@@ -36,6 +36,8 @@ services:
     image: coturn/coturn:4-alpine
     container_name: coturn
     network_mode: host
+    depends_on:
+      - webserver
     volumes:
       - certbot-var:/var/lib/letsencrypt
       - ./system/coturn/turnserver.conf:/etc/coturn/turnserver.conf
