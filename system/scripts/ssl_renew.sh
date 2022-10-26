@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COMPOSE="/usr/local/bin/docker-compose --no-ansi -f docker-compose.prod.yml"
+COMPOSE="/usr/bin/docker-compose --no-ansi -f docker-compose.prod.yml"
 DOCKER="/usr/bin/docker"
 
 cd /root/proj-roselite
