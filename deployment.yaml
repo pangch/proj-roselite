@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proj-roselite
+  labels:
+    app: proj-roselite
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: proj-roselite
+  template:
+    metadata:
+      name: proj-roselite-pod
+      labels:
+        app: proj-roselite
+    spec:
+      containers:
+        - name: proj-roselite
+          image: echevil/proj-roselite:latest
+          ports:
+            - containerPort: 8080
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proj-roselite-service
+spec:
+  selector:
+    app: proj-roselite
+  ports:
+    - name: proj-roselite
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
