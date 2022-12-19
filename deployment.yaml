@@ -19,7 +19,7 @@ spec:
         - name: proj-roselite
           image: echevil/proj-roselite:latest
           ports:
-            - containerPort: 8080
+            - containerPort: 3000
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -33,5 +33,5 @@ spec:
     - name: proj-roselite
       protocol: TCP
       port: 80
-      targetPort: 8080
+      targetPort: 3000
   type: ClusterIP
