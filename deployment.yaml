@@ -35,3 +35,27 @@ spec:
       port: 80
       targetPort: 3000
   type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webrtc-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "certs-prod"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+    - hosts:
+        - webrtc.chenpang.dev
+      secretName: webrtc-tls
+  rules:
+    - host: webrtc.chenpang.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: proj-roselite-service
+                port:
+                  number: 80
